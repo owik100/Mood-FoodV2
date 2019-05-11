@@ -7,6 +7,7 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -19,7 +20,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PracaInzynierska</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -38,7 +39,39 @@
                     </ul>
                 </div>
             </div>
+        </nav>*@
+
+        <nav class="navbar bg-danger navbar-dark navbar-expand-md ">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-hamburger"></i> Restauracja</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Przycisk nawigacyjny">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainmenu">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Strona główna</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <partial name="_LoginPartial" />
+                    <li>
+                        <a class="nav-link" href="https://www.facebook.com/"><i class="fab fa-facebook-square"></i></a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="https://twitter.com/"><i class="fab fa-twitter"></i></a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                    </li>
+                </ul>
+            </div>
         </nav>
+
     </header>
     <div class="container">
         <partial name="_CookieConsentPartial" />

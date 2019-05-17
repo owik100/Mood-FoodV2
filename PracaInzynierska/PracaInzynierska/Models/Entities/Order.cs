@@ -31,4 +31,3 @@ namespace PracaInzynierska.Models.Entities
         Complited
     }
 }
-}

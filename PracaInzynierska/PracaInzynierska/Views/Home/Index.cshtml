@@ -14,12 +14,6 @@
     </script>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
@@ -27,14 +21,14 @@
                 <div class="carousel-inner">
                     @foreach (var item in Model)
                     {
-                        <div class="carousel-item">
+                        <div class="carousel-item border border-dark">
                             <figure class="figure">
                                 <a class="text-danger nounderline" href=@Url.Action("Description","Product", new {id=item.ProductId })>
                                     <img src="@Url.ProductImagePath(item.NameOfImage)" class="img-fluid ">
                                 </a>
                                 <figcaption class="figure-caption text-center">
                                     <a class="text-danger nounderline" href=@Url.Action("Description","Product", new {id=item.ProductId })>
-                                        <h3 class="text-danger">@item.Name</h3>
+                                        <div class="text-danger lead">@item.Name</div>
                                     </a>
                                 </figcaption>
                             </figure>

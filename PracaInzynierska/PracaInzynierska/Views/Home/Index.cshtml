@@ -1,6 +1,6 @@
-﻿@using PracaInzynierska.Models.Entities;
+﻿@using PracaInzynierska.ViewModels;
 @using PracaInzynierska.Infrastructure;
-@model List<Product>
+@model IndexViewModel
 @{
     ViewData["Title"] = "Restauracja";
 }
@@ -19,16 +19,16 @@
         <div class="col-md-4">
             <div id="productImageSlider" class="carousel slide" data-ride="carousel" data-interval="2000">
                 <div class="carousel-inner">
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.RandomProducts)
                     {
-                        <div class="carousel-item border border-dark">
+                        <div class="carousel-item">
                             <figure class="figure">
                                 <a class="text-danger nounderline" href=@Url.Action("Description","Product", new {id=item.ProductId })>
-                                    <img src="@Url.ProductImagePath(item.NameOfImage)" class="img-fluid ">
+                                    <img src="@Url.ProductImagePath(item.NameOfImage)" class="img-fluid border border-dark ">
                                 </a>
                                 <figcaption class="figure-caption text-center">
                                     <a class="text-danger nounderline" href=@Url.Action("Description","Product", new {id=item.ProductId })>
-                                        <div class="text-danger lead">@item.Name</div>
+                                        <h3 class="text-danger ">@item.Name</h3>
                                     </a>
                                 </figcaption>
                             </figure>
@@ -46,11 +46,33 @@
             </div>
         </div>
         <div class="col-md-8">
-            <div class="jumbotron MlightColor">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada turpis sit amet ex aliquet dapibus. Maecenas a dapibus nunc. Aliquam tempor mi mollis laoreet tincidunt. Sed varius neque vitae malesuada pharetra. Sed aliquet dui vitae enim fringilla, vitae accumsan augue imperdiet. Aenean felis sapien, venenatis non suscipit eget, auctor ut mi. Suspendisse potenti. Nunc laoreet metus eget lacus tristique, ac rhoncus nisl interdum.
-                <hr />
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada turpis sit amet ex aliquet dapibus. Maecenas a dapibus nunc. Aliquam tempor mi mollis laoreet tincidunt. Sed varius neque vitae malesuada pharetra. Sed aliquet dui vitae enim fringilla, vitae accumsan augue imperdiet. Aenean felis sapien, venenatis non suscipit eget, auctor ut mi. Suspendisse potenti. Nunc laoreet metus eget lacus tristique, ac rhoncus nisl interdum.
+            @*<div class="jumbotron lightBackground">
+            <h1 class="text-center">Oferta dnia!</h1>
+            <hr />
+            <img src="@Url.ProductImagePath(Model.ProductOfTheDay.NameOfImage)" id="imgOfDay" class="img-fluid">
+            dsssssssssssssssssssssssssssssssssssss
+        </div>*@
+
+            <div class="container-fluid">
+                <div class="jumbotron bg-warning text-center">
+                    <div class="row">
+                        <div class="col-md-4 my-3">
+                            <img src=@Url.ProductImagePath(Model.ProductOfTheDay.NameOfImage) class="img-fluid" alt="Obrazek produktu">
+                        </div>
+                        <div class="col-md-8 mt-3">
+                            <h4 class="display-3 pt-2">@Model.ProductOfTheDay.Name</h4>
+                            <p class="lead ml-1">
+                                @Model.ProductOfTheDay.Description
+                            </p>
+                            <hr />
+                            <p class="font-weight-normal display-4">@Model.ProductOfTheDay.Price.ToString("c")</p>
+                            @Html.ActionLink("Dodaj do zamówienia", "Add", "Cart", new { id = Model.ProductOfTheDay.ProductId }, new { @class = "btn btn-success" })
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
         </div>
     </div>
 </div>

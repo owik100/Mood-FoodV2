@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using PracaInzynierska.Data;
 using PracaInzynierska.Models;
 using PracaInzynierska.Models.Entities;
+using PracaInzynierska.ViewModels;
 
 namespace PracaInzynierska.Controllers
 {
@@ -23,11 +24,14 @@ namespace PracaInzynierska.Controllers
 
             List<Product> randomProducts;
             randomProducts = _db.Products
-                .Where(x => x.Category.ShowProductsFromTheseCategoryInHomePage == true)
+                .Where(x => x.Category.ShowProductsFromTheseCategoryInHomePage == true && x.ProductOfTheDay == false)
                 .OrderBy(x => Guid.NewGuid())
                 .Take(4).ToList();
+            Product productOfTheDay = _db.Products.Where(x => x.ProductOfTheDay == true).FirstOrDefault();
 
-            return View(randomProducts);
+            IndexViewModel indexViewModel = new IndexViewModel { RandomProducts = randomProducts, ProductOfTheDay = productOfTheDay };
+
+            return View(indexViewModel);
         }
 
         public IActionResult Privacy()

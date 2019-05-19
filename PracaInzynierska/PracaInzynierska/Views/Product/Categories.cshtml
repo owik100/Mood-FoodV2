@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PracaInzynierska.Models.Entities.Category>
+@using PracaInzynierska.Infrastructure;
+@{
+    ViewBag.Title = "Menu";
+}
+<h2 class="text-center display-4">Menu</h2>
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-lg-3 col-sm-6 ">
+            <div class="jumbotron bg-warning">
+                <a class="text-danger nounderline" asp-controller="Products" asp-action="Products">
+                    <h1 class="display-4 text-center">Całe menu</h1>
+                </a>
+                <p class="lead text-center">Mamy wszystko czego pragniesz!</p>
+                <hr class="my-4">
+                <a asp-controller="Products" asp-action="Products">
+                    <img class="img-fluid" src=@Url.CategoriesImagePath("Food.jpeg") />
+                </a>
+            </div>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-sm-6 ">
+                <div class="jumbotron bg-warning">
+                    <a class="text-danger nounderline" asp-controller="Products" asp-action="Products" asp-category="@item.Name">
+                        <h1 class="display-4 text-center">@item.Name</h1>
+                    </a>
+                    <p class="lead text-center">@item.Description</p>
+                    <hr class="my-4">
+                    <a asp-controller="Products" asp-action="Products" asp-category="@item.Name">
+                        <img class="img-fluid" src=@Url.CategoriesImagePath(item.NameOfImage) />
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

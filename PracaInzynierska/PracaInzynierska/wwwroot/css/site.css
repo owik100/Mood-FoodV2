@@ -69,6 +69,6 @@ body {
     text-decoration: line-through;
 }
 
-.jumbotron {
+.noPaddingBottom {
     padding-bottom: 0;
 }

@@ -10,5 +10,6 @@ namespace PracaInzynierska.ViewModels
     {
         public List<Product> RandomProducts { get; set; }
         public Product ProductOfTheDay { get; set; }
+
     }
 }

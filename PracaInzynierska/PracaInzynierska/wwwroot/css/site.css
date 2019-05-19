@@ -64,3 +64,11 @@ body {
 .lightBackground {
     background-color: #e9cca0;
 }
+
+.lineThrough {
+    text-decoration: line-through;
+}
+
+.jumbotron {
+    padding-bottom: 0;
+}

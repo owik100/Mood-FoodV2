@@ -23,11 +23,11 @@
                     {
                         <div class="carousel-item">
                             <figure class="figure">
-                                <a class="text-danger nounderline" href=@Url.Action("Description","Product", new {id=item.ProductId })>
+                                <a class="text-danger nounderline" asp-action="Description" asp-controller="Product" asp-id= "@item.ProductId">
                                     <img src="@Url.ProductImagePath(item.NameOfImage)" class="img-fluid border border-dark ">
                                 </a>
                                 <figcaption class="figure-caption text-center">
-                                    <a class="nounderline" href=@Url.Action("Description","Product", new {id=item.ProductId })>
+                                    <a class="nounderline" asp-action="Description" asp-controller="Product" asp-id= "@item.ProductId">
                                         <h3 class="font-weight-normal text-dark">@item.Name</h3>
                                     </a>
                                 </figcaption>
@@ -78,8 +78,7 @@
                           
                         </div>
                         <div class="col-lg-2">
-
-                            @Html.ActionLink("Dodaj do zamówienia", "Add", "Cart", new { id = Model.ProductOfTheDay.ProductId }, new { @class = "btn btn-success" })
+                            <a asp-action="Add" asp-controller="Cart" asp-id="@Model.ProductOfTheDay.ProductId " class="btn btn-success">Dodaj do zamówienia</a>
                         </div>
                     </div>
 
@@ -91,32 +90,32 @@
     </div>
 </div>
 
-<p class="card-body">
+<p class="card-body text-center">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada turpis sit amet ex aliquet dapibus. Maecenas a dapibus nunc. Aliquam tempor mi mollis laoreet tincidunt. Sed varius neque vitae malesuada pharetra. Sed aliquet dui vitae enim fringilla, vitae accumsan augue imperdiet. Aenean felis sapien, venenatis non suscipit eget, auctor ut mi. Suspendisse potenti. Nunc laoreet metus eget lacus tristique, ac rhoncus nisl interdum.
 </p>
 
 
-<p class="card-body">
+<p class="card-body text-center">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada turpis sit amet ex aliquet dapibus. Maecenas a dapibus nunc. Aliquam tempor mi mollis laoreet tincidunt. Sed varius neque vitae malesuada pharetra. Sed aliquet dui vitae enim fringilla, vitae accumsan augue imperdiet. Aenean felis sapien, venenatis non suscipit eget, auctor ut mi. Suspendisse potenti. Nunc laoreet metus eget lacus tristique, ac rhoncus nisl interdum.
 </p>
 
 
-<p class="card-body">
+<p class="card-body text-center">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada turpis sit amet ex aliquet dapibus. Maecenas a dapibus nunc. Aliquam tempor mi mollis laoreet tincidunt. Sed varius neque vitae malesuada pharetra. Sed aliquet dui vitae enim fringilla, vitae accumsan augue imperdiet. Aenean felis sapien, venenatis non suscipit eget, auctor ut mi. Suspendisse potenti. Nunc laoreet metus eget lacus tristique, ac rhoncus nisl interdum.
 </p>
 
 
-<p class="card-body">
+<p class="card-body text-center">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada turpis sit amet ex aliquet dapibus. Maecenas a dapibus nunc. Aliquam tempor mi mollis laoreet tincidunt. Sed varius neque vitae malesuada pharetra. Sed aliquet dui vitae enim fringilla, vitae accumsan augue imperdiet. Aenean felis sapien, venenatis non suscipit eget, auctor ut mi. Suspendisse potenti. Nunc laoreet metus eget lacus tristique, ac rhoncus nisl interdum.
 </p>
 
 
-<p class="card-body">
+<p class="card-body text-center">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada turpis sit amet ex aliquet dapibus. Maecenas a dapibus nunc. Aliquam tempor mi mollis laoreet tincidunt. Sed varius neque vitae malesuada pharetra. Sed aliquet dui vitae enim fringilla, vitae accumsan augue imperdiet. Aenean felis sapien, venenatis non suscipit eget, auctor ut mi. Suspendisse potenti. Nunc laoreet metus eget lacus tristique, ac rhoncus nisl interdum.
 </p>
 
 
-<p class="card-body">
+<p class="card-body text-center">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada turpis sit amet ex aliquet dapibus. Maecenas a dapibus nunc. Aliquam tempor mi mollis laoreet tincidunt. Sed varius neque vitae malesuada pharetra. Sed aliquet dui vitae enim fringilla, vitae accumsan augue imperdiet. Aenean felis sapien, venenatis non suscipit eget, auctor ut mi. Suspendisse potenti. Nunc laoreet metus eget lacus tristique, ac rhoncus nisl interdum.
 </p>
 

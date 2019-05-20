@@ -24,7 +24,7 @@
                         <div class="carousel-item">
                             <figure class="figure">
                                 <a class="text-danger nounderline" asp-action="Description" asp-controller="Product" asp-id= "@item.ProductId">
-                                    <img src="@Url.ProductImagePath(item.NameOfImage)" class="img-fluid border border-dark ">
+                                    <img src="@Url.ProductImagePath(item.NameOfImage)" class="img-fluid border border-dark border-3 ">
                                 </a>
                                 <figcaption class="figure-caption text-center">
                                     <a class="nounderline" asp-action="Description" asp-controller="Product" asp-id= "@item.ProductId">
@@ -46,18 +46,11 @@
             </div>
         </div>
         <div class="col-md-8">
-            @*<div class="jumbotron lightBackground">
-                    <h1 class="text-center">Oferta dnia!</h1>
-                    <hr />
-                    <img src="@Url.ProductImagePath(Model.ProductOfTheDay.NameOfImage)" id="imgOfDay" class="img-fluid">
-                    dsssssssssssssssssssssssssssssssssssss
-                </div>*@
-
             <div class="container-fluid">
                 <div class="jumbotron lightBackground text-center noPaddingBottom">
                     <div class="row">
                         <div class="col-md-4 my-3">
-                            <img src=@Url.ProductImagePath(Model.ProductOfTheDay.NameOfImage) class="img-fluid border border-dark" alt="Obrazek produktu">
+                            <img src=@Url.ProductImagePath(Model.ProductOfTheDay.NameOfImage) class="img-fluid border border-dark border-3" alt="Obrazek produktu">
                         </div>
                         <div class="col-md-8 mt-3">
                             <h4 class="display-2 pt-2">Oferta dnia!</h4>

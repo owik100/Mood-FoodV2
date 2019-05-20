@@ -68,7 +68,14 @@ namespace PracaInzynierska
 
             app.UseMvc(routes =>
             {
+
                 routes.MapRoute(
+           name: "Menu",
+           template: "Menu/{category?}",
+           defaults: new { controller = "Product", action = "Products" });
+
+
+              routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });

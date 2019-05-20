@@ -11,12 +11,12 @@
 
         <div class="col-lg-3 col-sm-6 ">
             <div class="jumbotron bg-warning">
-                <a class="text-danger nounderline" asp-controller="Products" asp-action="Products">
+                <a class="text-danger nounderline" asp-controller="Product" asp-action="Products">
                     <h1 class="display-4 text-center">Całe menu</h1>
                 </a>
                 <p class="lead text-center">Mamy wszystko czego pragniesz!</p>
                 <hr class="my-4">
-                <a asp-controller="Products" asp-action="Products">
+                <a asp-controller="Product" asp-action="Products">
                     <img class="img-fluid" src=@Url.CategoriesImagePath("Food.jpeg") />
                 </a>
             </div>
@@ -26,12 +26,12 @@
         {
             <div class="col-lg-3 col-sm-6 ">
                 <div class="jumbotron bg-warning">
-                    <a class="text-danger nounderline" asp-controller="Products" asp-action="Products" asp-category="@item.Name">
+                    <a class="nounderline text-danger" asp-controller="Product" asp-action="Products" asp-route-category="@item.Name">
                         <h1 class="display-4 text-center">@item.Name</h1>
                     </a>
                     <p class="lead text-center">@item.Description</p>
                     <hr class="my-4">
-                    <a asp-controller="Products" asp-action="Products" asp-category="@item.Name">
+                    <a asp-controller="Product" asp-action="Products" asp-route-category="@item.Name">
                         <img class="img-fluid" src=@Url.CategoriesImagePath(item.NameOfImage) />
                     </a>
                 </div>

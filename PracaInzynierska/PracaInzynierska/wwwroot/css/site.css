@@ -58,7 +58,6 @@ body {
 #imgOfDay
 {
     max-height:300px;
-
 }
 
 .lightBackground {
@@ -71,4 +70,20 @@ body {
 
 .noPaddingBottom {
     padding-bottom: 0;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.nounderline {
+    text-decoration: none !important
+}
+
+a {
+    outline: 0;
+}
+
+.border-3 {
+    border-width: 5px !important;
 }

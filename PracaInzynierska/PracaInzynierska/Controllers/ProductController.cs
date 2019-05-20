@@ -18,10 +18,28 @@ namespace PracaInzynierska.Controllers
 
         public ActionResult Categories()
         {
-
             var categories = _db.Categories.ToList();
 
             return View(categories);
+        }
+
+        public ActionResult Products(string category = "")
+        {
+
+            if (category == "")
+            {
+                var allProducts = _db.Products
+                    .Where(x => !x.Hidden)
+                    .ToList();
+
+                return View(allProducts);
+            }
+
+            var products = _db.Products
+                .Where(x => x.Category.Name == category && !x.Hidden)
+                .ToList();
+
+            return View(products);
         }
     }
 }

@@ -25,11 +25,11 @@
                     {
                         <div class="carousel-item">
                             <figure class="figure">
-                                <a class="text-danger nounderline" asp-action="Description" asp-controller="Product" asp-id="@item.ProductId">
+                                <a class="text-danger nounderline" asp-controller="Product" asp-action="Description" asp-route-id="@item.ProductId">
                                     <img src="@Url.ProductImagePath(item.NameOfImage)" class="img-fluid border border-dark border-3 ">
                                 </a>
                                 <figcaption class="figure-caption text-center">
-                                    <a class="nounderline" asp-action="Description" asp-controller="Product" asp-id="@item.ProductId">
+                                    <a class="nounderline" asp-action="Description" asp-controller="Product" asp-route-id="@item.ProductId">
                                         <h3 class="font-weight-normal text-dark">@item.Name</h3>
                                     </a>
                                 </figcaption>
@@ -54,11 +54,13 @@
                 <div class="jumbotron lightBackground text-center noPaddingBottom">
                     <div class="row">
                         <div class="col-md-4 my-3">
-                            <img src=@Url.ProductImagePath(Model.ProductOfTheDay.NameOfImage) class="img-fluid border border-dark border-3" alt="Obrazek produktu">
+                            <a class="text-danger nounderline" asp-controller="Product" asp-action="Description" asp-route-id="@Model.ProductOfTheDay.ProductId">
+                                <img src=@Url.ProductImagePath(Model.ProductOfTheDay.NameOfImage) class="img-fluid border border-dark border-3" alt="Obrazek produktu">
+                            </a>
                         </div>
                         <div class="col-md-8 mt-3">
                             <h4 class="display-2 pt-2">Oferta dnia!</h4>
-                            <h4 class="display-3 pt-2">@Model.ProductOfTheDay.Name</h4>
+                            <a asp-controller="Product" asp-action="Description" asp-route-id="@Model.ProductOfTheDay.ProductId" class="display-3 pt-2 nounderline text-danger">@Model.ProductOfTheDay.Name</a>
                             <p class="lead ml-1">
                                 @Model.ProductOfTheDay.Description
                             </p>

@@ -41,5 +41,15 @@ namespace PracaInzynierska.Controllers
 
             return View(products);
         }
+
+        public ActionResult Description(int id)
+        {
+
+            var product = _db.Products
+                 .Where(x => x.ProductId == id)
+                 .FirstOrDefault();
+
+            return View(product);
+        }
     }
 }

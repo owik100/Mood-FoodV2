@@ -16,6 +16,8 @@
 
 <div class="container-fluid">
     <div class="row">
+
+        <!--Random products-->
         <div class="col-md-4">
             <div id="productImageSlider" class="carousel slide" data-ride="carousel" data-interval="2000">
                 <div class="carousel-inner">
@@ -23,11 +25,11 @@
                     {
                         <div class="carousel-item">
                             <figure class="figure">
-                                <a class="text-danger nounderline" asp-action="Description" asp-controller="Product" asp-id= "@item.ProductId">
+                                <a class="text-danger nounderline" asp-action="Description" asp-controller="Product" asp-id="@item.ProductId">
                                     <img src="@Url.ProductImagePath(item.NameOfImage)" class="img-fluid border border-dark border-3 ">
                                 </a>
                                 <figcaption class="figure-caption text-center">
-                                    <a class="nounderline" asp-action="Description" asp-controller="Product" asp-id= "@item.ProductId">
+                                    <a class="nounderline" asp-action="Description" asp-controller="Product" asp-id="@item.ProductId">
                                         <h3 class="font-weight-normal text-dark">@item.Name</h3>
                                     </a>
                                 </figcaption>
@@ -45,6 +47,8 @@
                 </a>
             </div>
         </div>
+
+        <!--Product of the day-->
         <div class="col-md-8">
             <div class="container-fluid">
                 <div class="jumbotron lightBackground text-center noPaddingBottom">
@@ -68,17 +72,14 @@
                         </div>
                         <div class="col-lg-2">
                             <p class="font-weight-normal display-4 ">@((Model.ProductOfTheDay.Price * 0.9m).ToString("c"))</p>
-                          
+
                         </div>
                         <div class="col-lg-2">
                             <a asp-action="Add" asp-controller="Cart" asp-id="@Model.ProductOfTheDay.ProductId " class="btn btn-success">Dodaj do zamówienia</a>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>

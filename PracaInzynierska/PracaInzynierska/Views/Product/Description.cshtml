@@ -4,7 +4,7 @@
     ViewBag.Title = "Description";
 }
 
-@*@Html.Action("CategoryNav", "Product")*@
+@await Component.InvokeAsync("CategoryNavigation")
 
 <div class="container-fluid">
     <div class="jumbotron bg-warning text-center">

@@ -5,7 +5,7 @@
     ViewBag.Title = "Produkty";
 }
 
-@*@Html.Action("CategoryNav", "Product")*@
+@await Component.InvokeAsync("CategoryNavigation")
 <div class="container-fluid">
     <div class="row">
         @foreach (var item in Model)

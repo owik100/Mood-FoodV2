@@ -1,0 +1,17 @@
+﻿@model IEnumerable<PracaInzynierska.Models.Entities.Category>
+@{
+    Layout = null;
+}
+<ul class="nav justify-content-center">
+
+    <li class="nav-item">
+        <a class="btn btn-danger nav-link" asp-controller="Product" asp-action="Products" asp-route-category="">Całe menu</a>
+    </li>
+
+    @foreach (var item in Model)
+    {
+        <li class="nav-item">
+            <a class="btn btn-danger ml-2 mb-2 nav-link" asp-controller="Product" asp-action="Products" asp-route-category="@item.Name">@item.Name</a>
+        </li>
+    }
+</ul>

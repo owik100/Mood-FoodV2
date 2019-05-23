@@ -33,6 +33,10 @@ namespace PracaInzynierska.Controllers
 
             return View(indexViewModel);
         }
+        public IActionResult Contact()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {

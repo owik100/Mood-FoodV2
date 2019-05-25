@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PracaInzynierska.Data;
 using PracaInzynierska.Infrastructure;
+using PracaInzynierska.Models.Entities;
 using PracaInzynierska.ViewModels;
 
 namespace PracaInzynierska.Controllers
@@ -21,14 +22,98 @@ namespace PracaInzynierska.Controllers
 
         public IActionResult Index()
         {
-           
+
+            List<CartProductViewModel> cartProducts = GetShoppingCart();
+            decimal totalValue = CartTotalValue(cartProducts);
+            CartViewModel cart = new CartViewModel { CartProductViewModels = cartProducts, TotalValue = totalValue };
 
             return View(cart);
         }
 
-        public ActionResult Add(int id)
+        public IActionResult Add(int id)
         {
+            List<CartProductViewModel> cartProducts = GetShoppingCart();
 
+            CartProductViewModel item = cartProducts.Find(x => x.Product.ProductId == id);
+
+            //Jeżeli w koszyku nie ma dodawanego produktu to go dodaj, inaczej zwiększ jego ilość
+            if(item != null)
+            {
+                item.Quantity++;
+                item.Value = item.Quantity * item.Product.Price;
+            }
+            else
+            {
+                Product product = _db.Products.Find(id);
+                cartProducts.Add(new CartProductViewModel { Product = product, Quantity = 1, Value = product.Price });
+            }
+
+            HttpContext.Session.SetObjectAsJson(Constans.SessionCartKey, cartProducts);
+
+            return RedirectToAction("Index");
         }
+
+        public ActionResult Delete(int id)
+        {
+            List<CartProductViewModel> cartProducts = GetShoppingCart();
+
+            CartProductViewModel item = cartProducts.Find(x => x.Product.ProductId == id);
+
+            //Usuń produkt z koszyka lub zmniejsz jego ilość
+            if (item != null)
+            {
+                item.Quantity--;
+                item.Value = item.Product.Price * item.Quantity;
+
+                if (item.Quantity <= 0)
+                {
+                    cartProducts.Remove(item);
+                }
+            }
+
+            HttpContext.Session.SetObjectAsJson(Constans.SessionCartKey, cartProducts);
+
+            return RedirectToAction("Index");
+        }
+
+        public int GetQuantityCart()
+        {
+            List<CartProductViewModel> cartProducts = GetShoppingCart();
+            int quantity = cartProducts.Sum(x => x.Quantity);
+
+            return quantity;
+        }
+
+
+
+        private List<CartProductViewModel> GetShoppingCart()
+        {
+            List<CartProductViewModel> cartProducts = new List<CartProductViewModel>();
+
+            //Pobierz koszyk z sesji, jak nie ma to stwórz
+            if (HttpContext.Session.GetString(Constans.SessionCartKey) != null)
+            {
+                cartProducts = HttpContext.Session.GetObjectFromJson<List<CartProductViewModel>>(Constans.SessionCartKey);
+            }
+            else
+            {
+                HttpContext.Session.SetObjectAsJson(Constans.SessionCartKey, cartProducts);
+            }
+
+            return cartProducts;
+        }
+
+        private decimal CartTotalValue(List<CartProductViewModel> cart)
+        {
+            decimal totalValue = 0;
+
+            foreach (var item in cart)
+            {
+                totalValue += item.Value;
+            }
+
+            return totalValue;
+        }
+
     }
 }

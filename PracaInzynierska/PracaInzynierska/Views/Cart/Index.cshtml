@@ -1,7 +1,62 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
-}
+﻿@using PracaInzynierska.ViewModels;
+@using PracaInzynierska.Infrastructure;
 
-<h1>Index</h1>
+@model CartViewModel
+@{
+    ViewBag.Title = "Koszyk";
+}
+@await Component.InvokeAsync("CategoryNavigation")
+
+<h2 class="text-center display-4">Koszyk</h2>
+<section>
+    <div class="container">
+
+        <table class="table">
+            @foreach (var item in Model.CartProductViewModels)
+            {
+                <tr>
+                    <td>
+                        <a class="nounderline lead text-center text-danger" asp-controller="Product" asp-action="Description" asp-route-id="@item.Product.ProductId">@item.Product.Name</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Product" asp-action="Description" asp-route-id="@item.Product.ProductId"><img class="imagePreview img-thumbnail w-50" src=@Url.ProductImagePath(item.Product.NameOfImage) /> </a>
+                    </td>
+                    <td>
+                        <p>@item.Product.Description</p>
+                    </td>
+                    <td>
+                        <p class="font-weight-bold">Ilość: @item.Quantity</p>
+                    </td>
+                    <td class="font-weight-bold">
+                        @item.Value.ToString("c")
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-controller="Cart" asp-action="Delete" asp-route-id="@item.Product.ProductId">Usuń</a>
+                    </td>
+                </tr>
+            }
+        </table>
+        <div class="d-flex justify-content-center">
+
+            @if (Model.TotalValue <= 0)
+            {
+                <p class="font-weight-normal ">Twój koszyk jest pusty. Dodaj coś!</p>
+            }
+            else
+            {
+                <p class="font-weight-normal display-4">Całkowity koszt: @Model.TotalValue.ToString("c")</p>
+
+            }
+
+        </div>
+
+        @if (Model.TotalValue > 0)
+        {
+            <div class="row align-items-center justify-content-center">
+                <a class="btn btn-success btn-lg" asp-controller="Cart" asp-action="Order">Zamawiam!</a>
+            </div>
+        }
+
+    </div>
+</section>
 

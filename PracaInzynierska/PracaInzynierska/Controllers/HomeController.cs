@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PracaInzynierska.Data;
 using PracaInzynierska.Models;
@@ -21,7 +22,6 @@ namespace PracaInzynierska.Controllers
         }
         public IActionResult Index()
         {
-
             List<Product> randomProducts;
             randomProducts = _db.Products
                 .Where(x => x.Category.ShowProductsFromTheseCategoryInHomePage == true && x.ProductOfTheDay == false)

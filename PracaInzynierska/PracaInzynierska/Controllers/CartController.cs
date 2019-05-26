@@ -76,15 +76,31 @@ namespace PracaInzynierska.Controllers
             return RedirectToAction("Index");
         }
 
-        public int GetQuantityCart()
+        [HttpGet]
+        public ActionResult Order()
         {
-            List<CartProductViewModel> cartProducts = GetShoppingCart();
-            int quantity = cartProducts.Sum(x => x.Quantity);
+            Order order = new Order();
 
-            return quantity;
+            return View(order);
         }
 
+        [HttpPost]
+        public ActionResult Order(Order order)
+        {
+            if (ModelState.IsValid)
+            {
 
+
+                return RedirectToAction("OrderConfirmation");
+            }
+            else
+                return View(order);
+        }
+
+        public ActionResult OrderConfirmation()
+        {
+            return View();
+        }
 
         private List<CartProductViewModel> GetShoppingCart()
         {

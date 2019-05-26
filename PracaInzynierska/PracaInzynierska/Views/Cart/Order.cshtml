@@ -1,0 +1,73 @@
+﻿@model PracaInzynierska.Models.Entities.Order
+
+@{
+    ViewData["Title"] = "Zamówienie";
+}
+
+<h1 class="display-3 text-center" >Złóż zamówienie</h1>
+
+<hr />
+<div class="container">
+    <div class="row ">
+        <div class="col-sm-6 offset-sm-3 text-center">
+            <form asp-action="Order">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Street" class="control-label"></label>
+                    <input asp-for="Street" class="form-control" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ZIPCode" class="control-label"></label>
+                    <input asp-for="ZIPCode" class="form-control" />
+                    <span asp-validation-for="ZIPCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HouseNumber" class="control-label"></label>
+                    <input asp-for="HouseNumber" class="form-control" />
+                    <span asp-validation-for="HouseNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Emial" class="control-label"></label>
+                    <input asp-for="Emial" class="form-control" />
+                    <span asp-validation-for="Emial" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OptionalDescription" class="control-label"></label>
+                    <input asp-for="OptionalDescription" class="form-control" />
+                    <span asp-validation-for="OptionalDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-12">
+                        <input type="submit" value="Złóż zamówienie!" class="btn btn-success" />
+                    </div>
+                </div>
+            </form>
+            <div class="col-md-offset-2 col-md-12 mt-5">
+                <a class="btn btn-light" asp-action="Index">Wróć do koszyka</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

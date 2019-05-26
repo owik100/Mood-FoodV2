@@ -89,17 +89,44 @@ namespace PracaInzynierska.Controllers
         {
             if (ModelState.IsValid)
             {
+                List<CartProductViewModel> shoppingCart = GetShoppingCart();
+             
+                List<OrderItem> orderItems = new List<OrderItem>();
 
+                foreach (var item in shoppingCart)
+                {
+                    OrderItem orderItem = new OrderItem
+                    {
+                        Product = item.Product,
+                        Quantity = item.Quantity,
+                        PurchasePrice = item.Value
+                    };
 
-                return RedirectToAction("OrderConfirmation");
+                    orderItems.Add(orderItem);
+                }
+
+                order.OrderDate = DateTime.Now;
+                order.OrderItem = orderItems;
+                order.OrderValue = CartTotalValue(shoppingCart);
+
+                _db.Orders.Add(order);
+                _db.SaveChanges();
+
+                //Usuń koszyk
+                EmptyCart();
+
+                //Pokaż potwierdzenie
+                ViewData["OrderComplete"] = "Zamówienie złożone!";
+                return RedirectToAction("Index");
             }
             else
                 return View(order);
         }
 
-        public ActionResult OrderConfirmation()
+        private void EmptyCart()
         {
-            return View();
+            // HttpContext.Session.Clear();
+            HttpContext.Session.Remove(Constans.SessionCartKey);
         }
 
         private List<CartProductViewModel> GetShoppingCart()

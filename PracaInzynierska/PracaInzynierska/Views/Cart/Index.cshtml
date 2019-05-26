@@ -8,6 +8,14 @@
 @await Component.InvokeAsync("CategoryNavigation")
 
 <h2 class="text-center display-4">Koszyk</h2>
+
+@{ 
+    if( ViewData["OrderComplete"] !=null)
+    {
+        <div class="alert alert-primary">@ViewData["OrderComplete"]</div>
+    }
+}
+
 <section>
     <div class="container">
 

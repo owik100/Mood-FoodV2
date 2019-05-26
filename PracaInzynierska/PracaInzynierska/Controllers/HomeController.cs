@@ -22,12 +22,24 @@ namespace PracaInzynierska.Controllers
         }
         public IActionResult Index()
         {
+
+            Product productOfTheDay = _db.Products.Where(x => x.ProductOfTheDay == true).FirstOrDefault();
+
+            if(productOfTheDay == null)
+            {
+                _db.Products.First().ProductOfTheDay = true;
+                _db.SaveChanges();
+
+                productOfTheDay = _db.Products.First();
+            }
+
             List<Product> randomProducts;
             randomProducts = _db.Products
                 .Where(x => x.Category.ShowProductsFromTheseCategoryInHomePage == true && x.ProductOfTheDay == false)
                 .OrderBy(x => Guid.NewGuid())
                 .Take(4).ToList();
-            Product productOfTheDay = _db.Products.Where(x => x.ProductOfTheDay == true).FirstOrDefault();
+
+            
 
             IndexViewModel indexViewModel = new IndexViewModel { RandomProducts = randomProducts, ProductOfTheDay = productOfTheDay };
 

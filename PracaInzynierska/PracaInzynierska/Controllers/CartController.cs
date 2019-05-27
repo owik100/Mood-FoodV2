@@ -97,7 +97,7 @@ namespace PracaInzynierska.Controllers
                 {
                     OrderItem orderItem = new OrderItem
                     {
-                        Product = item.Product,
+                        ProductId = item.Product.ProductId,
                         Quantity = item.Quantity,
                         PurchasePrice = item.Value
                     };
@@ -116,7 +116,7 @@ namespace PracaInzynierska.Controllers
                 EmptyCart();
 
                 //Pokaż potwierdzenie
-                ViewData["OrderComplete"] = "Zamówienie złożone!";
+                TempData["OrderComplete"] = "Zamówienie złożone!";
                 return RedirectToAction("Index");
             }
             else

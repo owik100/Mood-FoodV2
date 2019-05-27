@@ -23,6 +23,7 @@ namespace PracaInzynierska.Controllers
         public IActionResult Index()
         {
 
+
             Product productOfTheDay = _db.Products.Where(x => x.ProductOfTheDay == true).FirstOrDefault();
 
             if(productOfTheDay == null)

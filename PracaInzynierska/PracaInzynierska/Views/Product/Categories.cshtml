@@ -8,10 +8,10 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-3 col-sm-6 ">
+        <div class="col ">
             <div class="jumbotron bg-warning">
                 <a class="text-danger nounderline" asp-controller="Product" asp-action="Products">
-                    <h1 class="display-4 text-center">Całe menu</h1>
+                    <h1 class="display-4 text-center">Wszystko</h1>
                 </a>
                 <p class="lead text-center">Mamy wszystko czego pragniesz!</p>
                 <hr class="my-4">
@@ -23,14 +23,14 @@
 
         @foreach (var item in Model)
         {
-            <div class="col-lg-3 col-sm-6 ">
+            <div class="col">
                 <div class="jumbotron bg-warning">
                     <a class="nounderline text-danger" asp-controller="Product" asp-action="Products" asp-route-category="@item.Name">
                         <h1 class="display-4 text-center">@item.Name</h1>
                     </a>
                     <p class="lead text-center">@item.Description</p>
                     <hr class="my-4">
-                    <a asp-controller="Product" asp-action="Products" asp-route-category="@item.Name">
+                    <a class="d-flex justify-content-center" asp-controller="Product" asp-action="Products" asp-route-category="@item.Name">
                         <img class="img-fluid" src=@Url.CategoriesImagePath(item.NameOfImage) />
                     </a>
                 </div>

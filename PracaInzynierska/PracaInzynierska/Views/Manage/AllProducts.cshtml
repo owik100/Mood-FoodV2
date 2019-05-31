@@ -1,0 +1,71 @@
+﻿@model IEnumerable<PracaInzynierska.Models.Entities.Product>
+@using PracaInzynierska.Infrastructure
+
+@{
+    ViewData["Title"] = "Wszystkie produkty";
+}
+<h2 class="text-center display-4">Wszystkie produkty</h2>
+
+<p class="text-center">
+    <a class="btn btn-success btn-lg" asp-action="Create">Dodaj nowy produkt</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameOfImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductOfTheDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hidden)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td style="width:50%;">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <img class="img-fluid" src="@Url.ProductImagePath(item.NameOfImage)" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductOfTheDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hidden)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                <a class="btn btn-warning" asp-action="ProductEdit" asp-route-id="@item.ProductId">Edytuj</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

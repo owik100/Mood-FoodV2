@@ -84,6 +84,7 @@ namespace PracaInzynierska.Controllers
             return View(order);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Order(Order order)
         {

@@ -36,7 +36,7 @@ namespace PracaInzynierska.Controllers
 
             List<Product> randomProducts;
             randomProducts = _db.Products
-                .Where(x => x.Category.ShowProductsFromTheseCategoryInHomePage == true && x.ProductOfTheDay == false)
+                .Where(x => x.Category.ShowProductsFromTheseCategoryInHomePage == true && x.ProductOfTheDay == false && !x.Hidden)
                 .OrderBy(x => Guid.NewGuid())
                 .Take(4).ToList();
 

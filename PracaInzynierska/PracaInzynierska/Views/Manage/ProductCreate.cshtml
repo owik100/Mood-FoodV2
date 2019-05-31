@@ -1,19 +1,18 @@
 ﻿@model PracaInzynierska.Models.Entities.Product
 
 @{
-    ViewData["Title"] = "Edycja produktu";
+    ViewData["Title"] = "Tworzenie produktu";
 }
 
-    <h2 class="text-center display-4">Edycja produktu</h2>
+<h2 class="text-center display-4">Tworzenie produktu</h2>
 
-<h4 class="text-center">@Model.Name</h4>
 <hr />
 <div class="container">
     <div class="row">
         <div class="col">
-            <form asp-action="ProductEdit" enctype="multipart/form-data">
+            <form asp-action="ProductCreate" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ProductId" />
+               
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />
@@ -49,7 +48,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="CategoryId" class="control-label">Kategoria</label>
-                    @Html.DropDownListFor(x => x.CategoryId, new SelectList(ViewBag.Categories, "CategoryId", "Name", Model.CategoryId))
+                    @Html.DropDownListFor(x => x.CategoryId, new SelectList(ViewBag.Categories, "CategoryId", "Name", 0))
                     <span asp-validation-for="CategoryId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -62,5 +61,4 @@
         </div>
     </div>
 </div>
-
 

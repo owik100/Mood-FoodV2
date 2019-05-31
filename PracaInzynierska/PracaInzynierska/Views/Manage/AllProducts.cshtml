@@ -4,10 +4,20 @@
 @{
     ViewData["Title"] = "Wszystkie produkty";
 }
+
+@{ if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">
+            @TempData["Message"]
+        </div>
+    }
+}
+
+
 <h2 class="text-center display-4">Wszystkie produkty</h2>
 
 <p class="text-center">
-    <a class="btn btn-success btn-lg" asp-action="Create">Dodaj nowy produkt</a>
+    <a class="btn btn-success btn-lg" asp-action="ProductCreate">Dodaj nowy produkt</a>
 </p>
 
 <table class="table">
@@ -40,32 +50,33 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td style="width:50%;">
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <img class="img-fluid" src="@Url.ProductImagePath(item.NameOfImage)" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductOfTheDay)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hidden)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                <a class="btn btn-warning" asp-action="ProductEdit" asp-route-id="@item.ProductId">Edytuj</a>
-            </td>
-        </tr>
+            <tr>
+                <td style="width:50%;">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <img class="img-fluid" src="@Url.ProductImagePath(item.NameOfImage)" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductOfTheDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hidden)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    <a class="btn btn-warning" asp-action="ProductEdit" asp-route-id="@item.ProductId">Edytuj</a>
+                    <a class="btn btn-danger" asp-action="ProductDelete" asp-route-id="@item.ProductId">Usuń</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

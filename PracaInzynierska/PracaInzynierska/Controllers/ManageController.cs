@@ -172,6 +172,25 @@ namespace PracaInzynierska.Controllers
             {
                 _db.Products.Remove(product);
                 _db.SaveChanges();
+
+                //Usuń obrazek
+                if(product.NameOfImage!=null)
+                {
+                    try
+                    {
+                        var imagesPhotoPath = ConfigurationManager.AppSetting["ProductsImagePath"];
+                        var rootFolderPath = _environment.WebRootPath;
+                        var relativePath = imagesPhotoPath + product.NameOfImage;
+                        var path = rootFolderPath + relativePath;
+
+                        System.IO.File.Delete(path); 
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                   
+                }
                 TempData["Message"] = "Sukces! Usunięto produkt";
             }
             return RedirectToAction("Index");

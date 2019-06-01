@@ -7,7 +7,7 @@ using PracaInzynierska.Models.Entities;
 
 namespace PracaInzynierska.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }

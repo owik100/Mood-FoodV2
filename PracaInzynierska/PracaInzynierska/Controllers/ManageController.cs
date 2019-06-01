@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using PracaInzynierska.ViewModels;
 
 namespace PracaInzynierska.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ManageController : Controller
     {
         private ApplicationDbContext _db;

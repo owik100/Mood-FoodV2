@@ -46,6 +46,9 @@ namespace PracaInzynierska.Data
 
             builder.Entity<Category>().HasData(categories);
             builder.Entity<Product>().HasData(products);
+
+            //builder.Entity<Order>()
+            //.HasForeignKey(p => p.UserID);
         }
     }
 }

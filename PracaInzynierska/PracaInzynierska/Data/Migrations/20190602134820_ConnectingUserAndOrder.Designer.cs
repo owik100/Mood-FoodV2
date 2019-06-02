@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PracaInzynierska.Data;
 
 namespace PracaInzynierska.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190602134820_ConnectingUserAndOrder")]
+    partial class ConnectingUserAndOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,18 +267,22 @@ namespace PracaInzynierska.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("Emial")
                         .IsRequired();
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("HouseNumber")
+                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("OptionalDescription");
@@ -285,16 +291,19 @@ namespace PracaInzynierska.Data.Migrations
 
                     b.Property<decimal>("OrderValue");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired();
 
                     b.Property<int>("Status");
 
                     b.Property<string>("Street")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("UserID");
 
                     b.Property<string>("ZIPCode")
+                        .IsRequired()
                         .HasMaxLength(6);
 
                     b.HasKey("OrderId");

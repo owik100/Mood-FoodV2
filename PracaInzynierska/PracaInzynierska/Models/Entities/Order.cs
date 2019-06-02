@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,6 +50,9 @@ namespace PracaInzynierska.Models.Entities
         public decimal OrderValue { get; set; }
 
         public List<OrderItem> OrderItem { get; set; }
+        [ForeignKey("ApplicationUser")]
+        public string UserID { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 
     public enum OrderStatus

@@ -28,5 +28,7 @@ namespace PracaInzynierska.Models.Entities
         [StringLength(10)]
         public string HouseNumber { get; set; }
 
+        public List<Order> Orders { get; set; }
+
     }
 }

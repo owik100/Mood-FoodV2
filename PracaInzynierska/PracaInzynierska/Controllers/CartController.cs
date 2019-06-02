@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PracaInzynierska.Data;
 using PracaInzynierska.Infrastructure;
@@ -84,7 +85,6 @@ namespace PracaInzynierska.Controllers
         public ActionResult Order()
         {
 
-
             var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var userId = userManager.GetUserId(HttpContext.User);
             ApplicationUser applicationUser = userManager.FindByIdAsync(userId).Result;
@@ -100,7 +100,7 @@ namespace PracaInzynierska.Controllers
                     Emial = applicationUser.Email,
                     HouseNumber = applicationUser.HouseNumber,
                     PhoneNumber = applicationUser.PhoneNumber,
-                    ZIPCode = applicationUser.ZIPCode,
+                    ZIPCode = applicationUser.ZIPCode,                 
 
                 };
 
@@ -136,6 +136,15 @@ namespace PracaInzynierska.Controllers
                 order.OrderDate = DateTime.Now;
                 order.OrderItem = orderItems;
                 order.OrderValue = CartTotalValue(shoppingCart);
+
+                //Dodaj zamówienie do zalogowanego użytkownika, jeżeli jest zalogowany
+                var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var userId = userManager.GetUserId(HttpContext.User);
+
+                if(userId != null)
+                {
+                    order.UserID = userId;
+                }
 
                 _db.Orders.Add(order);
                 _db.SaveChanges();

@@ -79,6 +79,8 @@ namespace PracaInzynierska.Controllers
         [HttpGet]
         public ActionResult Order()
         {
+
+
             Order order = new Order();
 
             return View(order);

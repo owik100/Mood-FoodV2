@@ -34,7 +34,7 @@ namespace PracaInzynierska.Data
 
             List<Product> products = new List<Product>
             {
-                new Product(){ProductId=1, Name="Hamburger", Description="Klasyczny hamburger, plaster wołowiny, cebula i ogórek", CategoryId=1, NameOfImage="Hamburger.jpeg", Price=2.99m, Hidden=false},
+                new Product(){ProductId=1, Name="Hamburger", Description="Klasyczny hamburger, plaster wołowiny, cebula i ogórek", CategoryId=1, NameOfImage="Hamburger.jpeg", Price=2.99m, Hidden=false, ProductOfTheDay=true},
                 new Product(){ProductId=2, Name="Cheeseburger", Description="Pyszny hamburger z dodatkiem plasterka sera", CategoryId=1, NameOfImage="Cheeseburger.jpeg", Price=3.99m, Hidden=false},
                 new Product(){ProductId=3, Name="Sałatka meksykańska", Description="Z ananasem, porem, kukurydzą, papryką, serem żółtym i czerwoną fasolką", CategoryId=2, NameOfImage="SalatkaMeksykanska.jpeg", Price=5.49m, Hidden=false},
                 new Product(){ProductId=4, Name="Sałatka z kurczakiem", Description="Mieszanka sałat z burakiem i kawałkami kurczaka w złocistej panierce", CategoryId=2, NameOfImage="SalatkaZKurczakiem.jpeg", Price=4.99m, Hidden=false},

@@ -55,10 +55,29 @@ namespace PracaInzynierska
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
-            //adding custom roles
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             await roleManager.CreateAsync(new IdentityRole("Admin"));
             await roleManager.CreateAsync(new IdentityRole("Member"));
+        }
+
+        private async Task CreateMainAdmin(IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var mainAdmin = new ApplicationUser
+            {
+                UserName = Configuration.GetSection("MainAdminSettings")["MainAdminEmail"],
+                Email = Configuration.GetSection("MainAdminSettings")["MainAdminPassword"]
+            };
+            string UserPassword = Configuration.GetSection("MainAdminSettings")["MainAdminPassword"];
+            var _user = await userManager.FindByEmailAsync(Configuration.GetSection("MainAdminSettings")["MainAdminPassword"]);
+            if (_user == null)
+            {
+                var createPowerUser = await userManager.CreateAsync(mainAdmin, UserPassword);
+                if (createPowerUser.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(mainAdmin, "Admin");
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -105,6 +124,7 @@ namespace PracaInzynierska
             });
 
             CreateRoles(serviceProvider).Wait();
+            CreateMainAdmin(serviceProvider).Wait();
         }
     }
 }

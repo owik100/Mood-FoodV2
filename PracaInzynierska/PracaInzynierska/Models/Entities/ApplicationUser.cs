@@ -27,6 +27,10 @@ namespace PracaInzynierska.Models.Entities
         [Display(Name = "Numer domu/mieszkania")]
         [StringLength(10)]
         public string HouseNumber { get; set; }
+        [Required(ErrorMessage = "Podaj numer telefonu")]
+        [Display(Name = "Numer telefonu")]
+        [Phone]
+        public override string PhoneNumber { get; set; }
 
         public List<Order> Orders { get; set; }
 

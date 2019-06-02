@@ -1,0 +1,108 @@
+﻿@using PracaInzynierska.Models.Entities
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<PracaInzynierska.Models.Entities.ApplicationUser>
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Wszyscy użytkownicy";
+}
+
+@{ if (TempData["MessageUser"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">
+            @TempData["MessageUser"]
+        </div>
+    }
+}
+
+<h1 class="text-center display-4">Wszyscy użytkownicy</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Street)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZIPCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HouseNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayName("Ilość zamówień")
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ZIPCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HouseNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <b>@item.Orders.Count()</b>
+                </td>
+                <td>
+                    @{
+                        if (item.Orders.Count() > 0)
+                        {
+                            <a class="btn btn-primary" asp-action="UserOrders" asp-route-id="@item.Id">Zamówienia</a>
+                        }
+                    }
+                </td>
+                <td>
+                    @{
+                        if (await UserManager.IsInRoleAsync(item, "Admin"))
+                        {
+                            <a class="btn btn-danger" asp-action="UserAdmin" asp-route-id="@item.Id">Odbierz prawa admina</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-success" asp-action="UserAdmin" asp-route-id="@item.Id">Nadaj prawa admina</a>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

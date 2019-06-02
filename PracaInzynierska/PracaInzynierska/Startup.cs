@@ -57,7 +57,6 @@ namespace PracaInzynierska
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             await roleManager.CreateAsync(new IdentityRole("Admin"));
-            await roleManager.CreateAsync(new IdentityRole("Member"));
         }
 
         private async Task CreateMainAdmin(IServiceProvider serviceProvider)

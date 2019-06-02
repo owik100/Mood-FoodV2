@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols;
 using PracaInzynierska.Data;
 using PracaInzynierska.Infrastructure;
@@ -22,17 +24,73 @@ namespace PracaInzynierska.Controllers
     {
         private ApplicationDbContext _db;
         private IHostingEnvironment _environment;
+        private IServiceProvider _serviceProvider;
 
-        public ManageController(ApplicationDbContext applicationDbContext, IHostingEnvironment environment)
+        public ManageController(ApplicationDbContext applicationDbContext, IHostingEnvironment environment, IServiceProvider serviceProvider)
         {
             _db = applicationDbContext;
             _environment = environment;
+            _serviceProvider = serviceProvider;
         }
 
         public IActionResult Index()
         {
-            return RedirectToAction("AllProducts");
+            return View();
+        }
 
+        public IActionResult AllUsers()
+        {
+           var users = _db.Users
+                .Include(x=>x.Orders)
+                .ToList();
+           return View(users);
+        }
+
+        public IActionResult UserOrders()
+        {
+            var users = _db.Users.ToList();
+            return View(users);
+        }
+
+        public async Task<IActionResult> UserAdmin(string Id)
+        {
+            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var user = await userManager.FindByIdAsync(Id);
+            var IsAdmin = await userManager.IsInRoleAsync(user, "Admin");
+
+            ViewBag.IsAdmin = IsAdmin;
+            return View(user);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> UserAdmin(ApplicationUser user)
+        {
+            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var IsAdmin = await userManager.IsInRoleAsync(user, "Admin");
+
+            //Czy zalogowany admin nie próbuje odebrać sobie praw?
+            var currentUserId = userManager.GetUserId(HttpContext.User);
+            if(currentUserId == user.Id)
+            {
+                TempData["MessageUser"] = "Błąd! Nie można zmienić uprawnień samemu sobie!";
+                return RedirectToAction("AllUsers");
+            }
+
+            var userEdit = await userManager.FindByIdAsync(user.Id);
+            //Jeżeli user był adminem, usuń, inaczej ustaw rolę
+            if (IsAdmin)
+            {
+                
+                await userManager.RemoveFromRoleAsync(userEdit, "Admin");
+            }
+            else
+            {
+                await userManager.AddToRoleAsync(userEdit, "Admin");
+            }
+            //await userManager.UpdateAsync(user);
+            TempData["MessageUser"] = "Sukces! Zmieniono uprawnienia";
+            return RedirectToAction("AllUsers");
         }
 
         public ActionResult AllProducts()
@@ -53,7 +111,7 @@ namespace PracaInzynierska.Controllers
 
             return View();
         }
-
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult ProductCreate(Product product, IFormFile file)
         {
@@ -90,7 +148,7 @@ namespace PracaInzynierska.Controllers
                 _db.SaveChanges();
 
                 TempData["Message"] = "Sukces! Dodano produkt";
-                return RedirectToAction("Index");
+                return RedirectToAction("AllProducts");
 
             }
 
@@ -155,7 +213,7 @@ namespace PracaInzynierska.Controllers
                 _db.SaveChanges();
 
                 TempData["Message"] = "Sukces! zaktualizowano produkt";
-                return RedirectToAction("Index");
+                return RedirectToAction("AllProducts");
 
             }
 
@@ -195,7 +253,7 @@ namespace PracaInzynierska.Controllers
                 }
                 TempData["Message"] = "Sukces! Usunięto produkt";
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProducts");
         }
 
     }

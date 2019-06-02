@@ -165,7 +165,6 @@ namespace PracaInzynierska.Areas.Identity.Pages.Account.Manage
             }
             catch (Exception ex)
             {
-
                 throw;
             }
 

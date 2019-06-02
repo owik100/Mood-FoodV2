@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using PracaInzynierska.Data;
 using PracaInzynierska.Infrastructure;
 using PracaInzynierska.Models.Entities;
@@ -14,10 +16,12 @@ namespace PracaInzynierska.Controllers
     public class CartController : Controller
     {
         private ApplicationDbContext _db;
+        private IServiceProvider _serviceProvider;
 
-        public CartController(ApplicationDbContext applicationDbContext)
+        public CartController(ApplicationDbContext applicationDbContext, IServiceProvider serviceProvider)
         {
             _db = applicationDbContext;
+            _serviceProvider = serviceProvider;
         }
 
         public IActionResult Index()
@@ -37,7 +41,7 @@ namespace PracaInzynierska.Controllers
             CartProductViewModel item = cartProducts.Find(x => x.Product.ProductId == id);
 
             //Jeżeli w koszyku nie ma dodawanego produktu to go dodaj, inaczej zwiększ jego ilość
-            if(item != null)
+            if (item != null)
             {
                 item.Quantity++;
                 item.Value = item.Quantity * item.Product.Price;
@@ -81,8 +85,29 @@ namespace PracaInzynierska.Controllers
         {
 
 
-            Order order = new Order();
+            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var userId = userManager.GetUserId(HttpContext.User);
+            ApplicationUser applicationUser = userManager.FindByIdAsync(userId).Result;
 
+            if (applicationUser != null)
+            {
+                Order orderUser = new Order
+                {
+                    FirstName = applicationUser.FirstName,
+                    LastName = applicationUser.LastName,
+                    City = applicationUser.City,
+                    Street = applicationUser.Street,
+                    Emial = applicationUser.Email,
+                    HouseNumber = applicationUser.HouseNumber,
+                    PhoneNumber = applicationUser.PhoneNumber,
+                    ZIPCode = applicationUser.ZIPCode,
+
+                };
+
+                return View(orderUser);
+            }
+
+            Order order = new Order();
             return View(order);
         }
 
@@ -93,7 +118,7 @@ namespace PracaInzynierska.Controllers
             if (ModelState.IsValid)
             {
                 List<CartProductViewModel> shoppingCart = GetShoppingCart();
-             
+
                 List<OrderItem> orderItems = new List<OrderItem>();
 
                 foreach (var item in shoppingCart)

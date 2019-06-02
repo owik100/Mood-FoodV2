@@ -66,7 +66,7 @@ namespace PracaInzynierska
             var mainAdmin = new ApplicationUser
             {
                 UserName = Configuration.GetSection("MainAdminSettings")["MainAdminEmail"],
-                Email = Configuration.GetSection("MainAdminSettings")["MainAdminPassword"]
+                Email = Configuration.GetSection("MainAdminSettings")["MainAdminEmail"]
             };
             string UserPassword = Configuration.GetSection("MainAdminSettings")["MainAdminPassword"];
             var _user = await userManager.FindByEmailAsync(Configuration.GetSection("MainAdminSettings")["MainAdminPassword"]);

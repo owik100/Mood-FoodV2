@@ -1,0 +1,116 @@
+﻿@model PracaInzynierska.ViewModels.UserOrdersViewModel
+
+@{
+    ViewData["Title"] = "Zamówienia";
+}
+
+<h1 class="text-center display-4">Zamówienia</h1>
+
+
+<!--User-->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.Street)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.ZIPCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.HouseNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser.Email)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.Street)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.ZIPCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.HouseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ApplicationUser.Email)
+            </td>
+        </tr>
+</table>
+
+<hr />
+
+@foreach (var item in Model.Orders)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Orders[0].OrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Orders[0].OrderValue)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Orders[0].OptionalDescription)
+                </th>
+                <th>
+                    @Html.DisplayName("Ilość zamówionych produktów")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Orders[0].Status)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OptionalDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderItem.Count)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                   <a class="btn btn bg-success" asp-controller="Manage" asp-action="OrderDetails" asp-route-id="@item.OrderId">Szczegóły</a>
+                </td>
+            </tr>
+    </table>
+}

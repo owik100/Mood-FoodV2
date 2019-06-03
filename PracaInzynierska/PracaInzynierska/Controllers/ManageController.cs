@@ -40,16 +40,45 @@ namespace PracaInzynierska.Controllers
 
         public IActionResult AllUsers()
         {
-           var users = _db.Users
-                .Include(x=>x.Orders)
-                .ToList();
-           return View(users);
+            var users = _db.Users
+                 .Include(x => x.Orders)
+                 .ToList();
+            return View(users);
         }
 
-        public IActionResult UserOrders()
+        public IActionResult UserOrders(string Id)
         {
-            var users = _db.Users.ToList();
-            return View(users);
+            var user = _db.Users.Find(Id);
+
+            var orders = _db.Orders.
+                Where(x => x.UserID == Id)
+                .Include(y => y.OrderItem)
+                .ToList();
+
+            UserOrdersViewModel userOrdersViewModel = new UserOrdersViewModel
+            {
+                ApplicationUser = user,
+                Orders = orders
+            };
+
+            return View(userOrdersViewModel);
+        }
+
+
+        public IActionResult OrderDetails(int id)
+        {
+
+            //TODO Zrobic viewModel i wyswietlic
+            var orderDetails = _db.OrderItems
+                .Where(x => x.OrderId == id)
+                .Include(y=>y.Product)
+                .ToList();
+
+            var order = _db.Orders.
+                Where(x => x.OrderId == id)
+                .FirstOrDefault();
+
+            return View(orderDetails);
         }
 
         public async Task<IActionResult> UserAdmin(string Id)
@@ -71,7 +100,7 @@ namespace PracaInzynierska.Controllers
 
             //Czy zalogowany admin nie próbuje odebrać sobie praw?
             var currentUserId = userManager.GetUserId(HttpContext.User);
-            if(currentUserId == user.Id)
+            if (currentUserId == user.Id)
             {
                 TempData["MessageUser"] = "Błąd! Nie można zmienić uprawnień samemu sobie!";
                 return RedirectToAction("AllUsers");
@@ -81,7 +110,7 @@ namespace PracaInzynierska.Controllers
             //Jeżeli user był adminem, usuń, inaczej ustaw rolę
             if (IsAdmin)
             {
-                
+
                 await userManager.RemoveFromRoleAsync(userEdit, "Admin");
             }
             else
@@ -234,7 +263,7 @@ namespace PracaInzynierska.Controllers
                 _db.SaveChanges();
 
                 //Usuń obrazek
-                if(product.NameOfImage!=null)
+                if (product.NameOfImage != null)
                 {
                     try
                     {
@@ -243,13 +272,13 @@ namespace PracaInzynierska.Controllers
                         var relativePath = imagesPhotoPath + product.NameOfImage;
                         var path = rootFolderPath + relativePath;
 
-                        System.IO.File.Delete(path); 
+                        System.IO.File.Delete(path);
                     }
                     catch (Exception)
                     {
 
                     }
-                   
+
                 }
                 TempData["Message"] = "Sukces! Usunięto produkt";
             }

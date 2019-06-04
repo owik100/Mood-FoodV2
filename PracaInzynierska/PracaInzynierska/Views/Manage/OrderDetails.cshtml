@@ -1,0 +1,81 @@
+﻿@model PracaInzynierska.ViewModels.OrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Szczegóły zamówienia";
+}
+
+<h1>OrderDetails</h1>
+
+<!--User-->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.Street)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.ZIPCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.HouseNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.Emial)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Order.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Order.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Order.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Order.Street)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Order.ZIPCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Order.HouseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Order.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Order.Emial)
+            </td>
+        </tr>
+</table>
+
+
+@foreach (var item in Model.OrderItems)
+{
+    <div>
+        <p>@item.Product.Name</p>
+        <p>@item.Quantity</p>
+    </div>
+}
+
+<hr />
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

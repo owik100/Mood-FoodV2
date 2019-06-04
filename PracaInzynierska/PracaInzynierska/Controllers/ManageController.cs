@@ -78,7 +78,13 @@ namespace PracaInzynierska.Controllers
                 Where(x => x.OrderId == id)
                 .FirstOrDefault();
 
-            return View(orderDetails);
+            OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel
+            {
+                Order = order,
+                OrderItems = orderDetails,
+            };
+
+            return View(orderDetailsViewModel);
         }
 
         public async Task<IActionResult> UserAdmin(string Id)

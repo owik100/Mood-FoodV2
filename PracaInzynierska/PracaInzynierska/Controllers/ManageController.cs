@@ -38,6 +38,17 @@ namespace PracaInzynierska.Controllers
             return View();
         }
 
+        public IActionResult AllOrders()
+        {
+            var orders = _db.Orders
+                .OrderBy(x => x.Status)
+                .ThenBy(y=>y.OrderDate)
+                .ToList();
+
+            return View (orders);
+        }
+        
+
         public IActionResult AllUsers()
         {
             var users = _db.Users

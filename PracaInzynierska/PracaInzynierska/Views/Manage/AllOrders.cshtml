@@ -1,0 +1,79 @@
+﻿@model List<PracaInzynierska.Models.Entities.Order>
+
+@{
+    ViewData["Title"] = "Zamówienia";
+}
+
+<h1 class="text-center display-4">Zamówienia</h1>
+
+
+
+@foreach (var item in Model)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].OrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].OrderValue)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].OptionalDescription)
+                </th>
+                <th>
+                    @Html.DisplayName("Ilość zamówionych produktów")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Status)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OptionalDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderItem.Count)
+                </td>
+                <td>
+                    @{
+                        if (item.Status == PracaInzynierska.Models.Entities.OrderStatus.New)
+                        {
+                            <a class="btn btn bg-success" asp-controller="Manage" asp-action="OrderComplete" asp-route-id="@item.OrderId">Zatwierdź</a>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Status)
+                        }
+                    }
+
+                </td>
+                <td>
+                    <a class="btn btn bg-primary" asp-controller="Manage" asp-action="OrderDetails" asp-route-id="@item.OrderId">Szczegóły</a>
+                </td>
+                <td>
+                    @{
+                        if (item.UserID != null)
+                        {
+                            <a class="btn btn bg-danger" asp-controller="Manage" asp-action="UserOrders" asp-route-id="@item.UserID">Użytkownik</a>
+                        }
+                        else
+                        {
+                            <p>Zamówienie nie zarejestrowanego użytkownika</p>
+                        }
+                    }
+                </td>
+            </tr>
+    </table>
+}

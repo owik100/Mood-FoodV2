@@ -45,8 +45,10 @@ namespace PracaInzynierska.Models.Entities
         public string Emial { get; set; }
         [Display(Name = "Dodatkowe informacje")]
         public string OptionalDescription { get; set; }
+        [Display(Name = "Data zamówienia")]
         public DateTime OrderDate { get; set; }
         public OrderStatus Status { get; set; }
+        [Display(Name = "Wartość zamówienia")]
         public decimal OrderValue { get; set; }
 
         public List<OrderItem> OrderItem { get; set; }
@@ -57,7 +59,9 @@ namespace PracaInzynierska.Models.Entities
 
     public enum OrderStatus
     {
+        [Display(Name = "Nowe")]
         New,
+        [Display(Name = "Zrealizowane")]
         Complited
     }
 }

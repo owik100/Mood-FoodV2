@@ -46,29 +46,44 @@ namespace PracaInzynierska.Controllers
             return View(users);
         }
 
+        public IActionResult OrderComplete(int id)
+        {
+            var order = _db.Orders.
+                 Where(x => x.OrderId == id)
+                 .FirstOrDefault();
+
+            return View(order);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult OrderCompleteChange(int OrderId)
+        {
+            var order = _db.Orders.Find(OrderId);
+
+            order.Status = OrderStatus.Complited;
+            _db.Entry<Order>(order).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            TempData["MessageUser"] = "Zamówienie zrealizowane!";
+            return RedirectToAction("AllUsers");
+        }
+
         public IActionResult UserOrders(string Id)
         {
-            var user = _db.Users.Find(Id);
-
+         
             var orders = _db.Orders.
                 Where(x => x.UserID == Id)
                 .Include(y => y.OrderItem)
                 .ToList();
 
-            UserOrdersViewModel userOrdersViewModel = new UserOrdersViewModel
-            {
-                ApplicationUser = user,
-                Orders = orders
-            };
-
-            return View(userOrdersViewModel);
+            return View(orders);
         }
 
 
         public IActionResult OrderDetails(int id)
         {
 
-            //TODO Zrobic viewModel i wyswietlic
             var orderDetails = _db.OrderItems
                 .Where(x => x.OrderId == id)
                 .Include(y=>y.Product)

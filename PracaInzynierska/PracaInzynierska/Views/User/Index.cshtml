@@ -29,7 +29,6 @@
                     @Html.DisplayNameFor(model => model[0].Status)
                 </th>
                 <th></th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -46,33 +45,11 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.OrderItem.Count)
                 </td>
-                <td>
-                    @{
-                        if (item.Status == PracaInzynierska.Models.Entities.OrderStatus.New)
-                        {
-                            <a class="btn btn bg-success" asp-controller="Manage" asp-action="OrderComplete" asp-route-id="@item.OrderId">Zatwierdź</a>
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.Status)
-                        }
-                    }
-
-                </td>
-                <td>
-                    <a class="btn btn bg-primary" asp-controller="Manage" asp-action="OrderDetails" asp-route-id="@item.OrderId">Szczegóły</a>
+                <td>           
+                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td style="width:10%">
-                    @{
-                        if (item.UserID != null)
-                        {
-                            <a class="btn btn bg-danger" asp-controller="Manage" asp-action="UserOrders" asp-route-id="@item.UserID">Użytkownik</a>
-                        }
-                        else
-                        {
-                            
-                        }
-                    }
+                    <a class="btn btn bg-primary" asp-controller="User" asp-action="OrderDetails" asp-route-id="@item.OrderId">Szczegóły</a>
                 </td>
             </tr>
     </table>

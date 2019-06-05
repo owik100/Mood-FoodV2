@@ -12,6 +12,12 @@
                     <a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Index">Zarz&#261;dzaj</a>
                 </li>
             }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Zarz&#261;dzaj</a>
+                </li>
+            }
             <li class="nav-item">
                 <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Wiatj @User.Identity.Name!</a>
             </li>

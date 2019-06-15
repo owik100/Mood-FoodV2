@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using PracaInzynierska.Models.Entities;
+using PracaInzynierska.Infrastructure;
 
 namespace PracaInzynierska.Areas.Identity.Pages.Account
 {
@@ -79,6 +80,7 @@ namespace PracaInzynierska.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    HttpContext.Session.Remove(Constans.SessionCartKey);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

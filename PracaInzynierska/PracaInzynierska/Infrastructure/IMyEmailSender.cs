@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace PracaInzynierska.Infrastructure
 {
-    public class ShoppingCartManager
+   public interface IMyEmailSender
     {
+        Task SendEmailAsync(string email, string subject, string htmlMessage);
     }
 }

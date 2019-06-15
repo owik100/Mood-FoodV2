@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,11 +20,13 @@ namespace PracaInzynierska.Controllers
     {
         private ApplicationDbContext _db;
         private IServiceProvider _serviceProvider;
+        private IMyEmailSender _emailSender;
 
-        public CartController(ApplicationDbContext applicationDbContext, IServiceProvider serviceProvider)
+        public CartController(ApplicationDbContext applicationDbContext, IServiceProvider serviceProvider, IMyEmailSender emailSender)
         {
             _db = applicationDbContext;
             _serviceProvider = serviceProvider;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -113,7 +117,7 @@ namespace PracaInzynierska.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Order(Order order)
+        public async Task<ActionResult> Order(Order order)
         {
             if (ModelState.IsValid)
             {
@@ -127,7 +131,8 @@ namespace PracaInzynierska.Controllers
                     {
                         ProductId = item.Product.ProductId,
                         Quantity = item.Quantity,
-                        PurchasePrice = item.Value
+                        PurchasePrice = item.Value,
+                        Product = _db.Products.Find(item.Product.ProductId)
                     };
 
                     orderItems.Add(orderItem);
@@ -146,8 +151,25 @@ namespace PracaInzynierska.Controllers
                     order.UserID = userId;
                 }
 
+                //Zapisz w bazie
                 _db.Orders.Add(order);
                 _db.SaveChanges();
+
+                //Wyślij potwierdzenie emailem
+                StringBuilder products = new StringBuilder();
+
+                foreach (var item in order.OrderItem)
+                {
+                    products.Append(item.Product.Name + " - " + item.Quantity + "szt.\n");
+                }
+
+                StringBuilder message = new StringBuilder();
+                message.Append("Dziękujemy za złożene zamówienia!\n\n");
+                message.Append(products);
+                message.Append("Całkowita wartość zamówienia: " + order.OrderValue.ToString("C"));
+
+                await _emailSender.SendEmailAsync(order.Emial, "Złożono zamówienie", message.ToString());
+
 
                 //Usuń koszyk
                 EmptyCart();

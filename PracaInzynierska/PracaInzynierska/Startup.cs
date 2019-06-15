@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using PracaInzynierska.Models.Entities;
+using PracaInzynierska.Infrastructure;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace PracaInzynierska
 {
@@ -51,6 +53,7 @@ namespace PracaInzynierska
             services.AddSession();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IMyEmailSender, MailManager>();
         }
 
         private async Task CreateRoles(IServiceProvider serviceProvider)

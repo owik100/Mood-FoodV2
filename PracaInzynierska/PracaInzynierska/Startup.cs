@@ -64,11 +64,19 @@ namespace PracaInzynierska
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var mainAdmin = new ApplicationUser
             {
-                UserName = Configuration.GetSection("MainAdminSettings")["MainAdminEmail"],
-                Email = Configuration.GetSection("MainAdminSettings")["MainAdminEmail"]
+                UserName = Configuration.GetSection("MainAdminSettings")["Email"],
+                Email = Configuration.GetSection("MainAdminSettings")["Email"],
+                FirstName = Configuration.GetSection("MainAdminSettings")["FirstName"],
+                LastName = Configuration.GetSection("MainAdminSettings")["LastName"],
+                City = Configuration.GetSection("MainAdminSettings")["City"],
+                Street = Configuration.GetSection("MainAdminSettings")["Street"],
+                ZIPCode = Configuration.GetSection("MainAdminSettings")["ZIPCode"],
+                HouseNumber = Configuration.GetSection("MainAdminSettings")["HouseNumber"],
+                PhoneNumber = Configuration.GetSection("MainAdminSettings")["PhoneNumber"],
             };
-            string UserPassword = Configuration.GetSection("MainAdminSettings")["MainAdminPassword"];
-            var _user = await userManager.FindByEmailAsync(Configuration.GetSection("MainAdminSettings")["MainAdminPassword"]);
+
+            string UserPassword = Configuration.GetSection("MainAdminSettings")["Password"];
+            var _user = await userManager.FindByEmailAsync(Configuration.GetSection("MainAdminSettings")["Email"]);
             if (_user == null)
             {
                 var createPowerUser = await userManager.CreateAsync(mainAdmin, UserPassword);

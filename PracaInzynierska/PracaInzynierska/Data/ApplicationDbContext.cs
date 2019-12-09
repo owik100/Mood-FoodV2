@@ -13,6 +13,7 @@ namespace PracaInzynierska.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Restaurant> Restaurants { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

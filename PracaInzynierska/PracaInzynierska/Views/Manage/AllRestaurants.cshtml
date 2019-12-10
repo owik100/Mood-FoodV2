@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PracaInzynierska.Models.Entities.Restaurant>
+
+@{
+    ViewData["Title"] = "Restauracje";
+}
+
+<h1 class="text-center display-4">Restauracje</h1>
+
+<p class="text-center">
+    <a class="btn btn-success btn-lg" asp-action="RestaurantCreate">Dodaj nową restaurację</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Street)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Number)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RestaurantId">Edit</a>
+                    <a asp-action="RestaurantDelete" asp-route-id="@item.RestaurantId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

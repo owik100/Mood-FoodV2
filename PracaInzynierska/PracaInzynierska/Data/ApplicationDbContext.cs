@@ -45,8 +45,11 @@ namespace PracaInzynierska.Data
                 new Product(){ProductId=8, Name="Musztarda", Description="Bardzo ostra!", CategoryId=4, NameOfImage="Musztarda.jpeg", Price=0.99m, Hidden=false},
             };
 
+            Restaurant restaurant = new Restaurant { RestaurantId = 1, City = "Bielsko-Biała", Street = "Willowa", Number = "2" };
+
             builder.Entity<Category>().HasData(categories);
             builder.Entity<Product>().HasData(products);
+            builder.Entity<Restaurant>().HasData(restaurant);
 
             //builder.Entity<Order>()
             //.HasForeignKey(p => p.UserID);

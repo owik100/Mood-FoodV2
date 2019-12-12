@@ -26,5 +26,10 @@ namespace PracaInzynierska.Models.Entities
         [StringLength(10)]
         public string Number { get; set; }
 
+        [Display(Name = "Maksymalna odległość dostawy w km")]
+        [Required(ErrorMessage = "Podaj maksymalną odległość dostawy w km")]
+        [StringLength(10)]
+        public string MaxDistance { get; set; }
+
     }
 }

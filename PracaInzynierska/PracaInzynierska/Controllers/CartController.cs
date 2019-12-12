@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using PracaInzynierska.Data;
 using PracaInzynierska.Infrastructure;
 using PracaInzynierska.Models.Entities;
@@ -138,48 +140,87 @@ namespace PracaInzynierska.Controllers
                     orderItems.Add(orderItem);
                 }
 
-                order.OrderDate = DateTime.Now;
-                order.OrderItem = orderItems;
-                order.OrderValue = CartTotalValue(shoppingCart);
+                bool distanceOk = CheckDistance(order);
 
-                //Dodaj zamówienie do zalogowanego użytkownika, jeżeli jest zalogowany
-                var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                var userId = userManager.GetUserId(HttpContext.User);
-
-                if(userId != null)
+                if(distanceOk)
                 {
-                    order.UserID = userId;
+                    order.OrderDate = DateTime.Now;
+                    order.OrderItem = orderItems;
+                    order.OrderValue = CartTotalValue(shoppingCart);
+
+                    //Dodaj zamówienie do zalogowanego użytkownika, jeżeli jest zalogowany
+                    var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userId = userManager.GetUserId(HttpContext.User);
+
+                    if (userId != null)
+                    {
+                        order.UserID = userId;
+                    }
+
+                    //Zapisz w bazie
+                    _db.Orders.Add(order);
+                    _db.SaveChanges();
+
+                    //Wyślij potwierdzenie emailem
+                    StringBuilder products = new StringBuilder();
+
+                    foreach (var item in order.OrderItem)
+                    {
+                        products.Append(item.Product.Name + " - " + item.Quantity + "szt.\n");
+                    }
+
+                    StringBuilder message = new StringBuilder();
+                    message.Append("Dziękujemy za złożene zamówienia!\n\n");
+                    message.Append(products);
+                    message.Append("Całkowita wartość zamówienia: " + order.OrderValue.ToString("C"));
+
+                    await _emailSender.SendEmailAsync(order.Emial, "Złożono zamówienie", message.ToString());
+
+
+                    //Usuń koszyk
+                    EmptyCart();
+
+                    //Pokaż potwierdzenie
+                    TempData["OrderComplete"] = "Zamówienie złożone!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["BigDistance"] = "Odległość od restauracji zbyt duża!";
+                    return View(order);
                 }
 
-                //Zapisz w bazie
-                _db.Orders.Add(order);
-                _db.SaveChanges();
-
-                //Wyślij potwierdzenie emailem
-                StringBuilder products = new StringBuilder();
-
-                foreach (var item in order.OrderItem)
-                {
-                    products.Append(item.Product.Name + " - " + item.Quantity + "szt.\n");
-                }
-
-                StringBuilder message = new StringBuilder();
-                message.Append("Dziękujemy za złożene zamówienia!\n\n");
-                message.Append(products);
-                message.Append("Całkowita wartość zamówienia: " + order.OrderValue.ToString("C"));
-
-                await _emailSender.SendEmailAsync(order.Emial, "Złożono zamówienie", message.ToString());
-
-
-                //Usuń koszyk
-                EmptyCart();
-
-                //Pokaż potwierdzenie
-                TempData["OrderComplete"] = "Zamówienie złożone!";
-                return RedirectToAction("Index");
+              
             }
             else
                 return View(order);
+        }
+
+        private bool CheckDistance(Order order)
+        {
+            List<Restaurant> restaurants = new List<Restaurant>();
+
+            restaurants = _db.Restaurants.ToList();
+
+            foreach (var item in restaurants)
+            {
+
+                //Zamówienie z tego samego miasta co restauracja
+                if (item.City == order.City)
+                    return true;
+
+                var json = new WebClient().DownloadString($"https://www.dystans.org/route.json?stops={item.City}|{order.City}");
+                dynamic city = JsonConvert.DeserializeObject(json);
+
+                string distance = city.distance;
+
+                
+
+                if ((Convert.ToInt32(distance) <= Convert.ToInt32(item.MaxDistance) && (Convert.ToInt32(distance) !=0)))
+                    return true;
+            }
+
+            return false;
         }
 
         private void EmptyCart()

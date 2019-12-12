@@ -38,8 +38,7 @@
                     @Html.DisplayFor(modelItem => item.Number)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.RestaurantId">Edit</a>
-                    <a asp-action="RestaurantDelete" asp-route-id="@item.RestaurantId">Delete</a>
+                    <a class="btn btn-danger" asp-action="RestaurantDelete" asp-route-id="@item.RestaurantId">Usuń</a>
                 </td>
             </tr>
         }

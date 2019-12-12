@@ -4,7 +4,14 @@
     ViewData["Title"] = "Zamówienie";
 }
 
-<h1 class="display-3 text-center" >Złóż zamówienie</h1>
+@{
+    if (TempData["BigDistance"] != null)
+    {
+        <div class="text-center alert alert-warning">@TempData["BigDistance"]</div>
+    }
+}
+
+<h1 class="display-3 text-center">Złóż zamówienie</h1>
 
 <hr />
 <div class="container">

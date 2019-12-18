@@ -163,23 +163,43 @@ namespace PracaInzynierska.Controllers
         }
 
         [HttpGet]
-        public ActionResult RestaurantCreate()
+        public ActionResult RestaurantCreateEdit(int? Id)
         {
+            if(Id!=null)
+            {
+                var restaurant = _db.Restaurants.Find(Id);
+                ViewBag.Edit = true;
+                return View(restaurant);
+            }
             return View();
         }
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult RestaurantCreate(Restaurant restaurant)
-        {
-            if (ModelState.IsValid)
-            {           
-                _db.Restaurants.Add(restaurant);
-                _db.SaveChanges();
-
-                TempData["Message"] = "Sukces! Dodano restaurację";
-                return RedirectToAction("AllRestaurants");
-
+        public ActionResult RestaurantCreateEdit(Restaurant restaurant)
+        {  
+            if (restaurant.RestaurantId >0)
+                {
+                if (ModelState.IsValid)
+                        {
+                    _db.Entry(restaurant).State = EntityState.Modified;
+                    _db.SaveChanges();
+                    TempData["Message"] = "Sukces! zmieniono restaurację";
+                    return RedirectToAction("AllRestaurants");
+                }
+                else
+                {
+                    return View(restaurant);
+                }
             }
+            ModelState.Remove("RestaurantId");
+                 if (ModelState.IsValid)
+                {
+                    _db.Restaurants.Add(restaurant);
+                    _db.SaveChanges();
+                    TempData["Message"] = "Sukces! Dodano restaurację";
+                return RedirectToAction("AllRestaurants");
+            }
+            
             return View(restaurant);
         }
 

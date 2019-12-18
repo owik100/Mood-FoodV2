@@ -2,15 +2,25 @@
 
 @{
     ViewData["Title"] = "Tworzenie restauracji";
+
+
+
 }
 
-<h2 class="text-center display-4">Tworzenie restauracji</h2>
 
-<hr />
+@if(ViewBag.Edit == true)
+{
+    <h2 class="text-center display-4">Edycja restauracji</h2>
+}
+else{
+<h2 class="text-center display-4">Tworzenie restauracji</h2>
+}
+
 <div class="container">
     <div class="row">
         <div class="col">
             <form asp-action="RestaurantCreate">
+                <input type="hidden" asp-for="RestaurantId" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="City" class="control-label"></label>
@@ -28,11 +38,16 @@
                     <span asp-validation-for="Number" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="MaxDistance" class="control-label"></label>
+                    <input asp-for="MaxDistance" class="form-control" />
+                    <span asp-validation-for="MaxDistance" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <input type="submit" value="Zapisz" class="btn btn-success" />
                 </div>
             </form>
             <div>
-                <a class="btn btn-primary" asp-action="Index">Wróć</a>
+                <a class="btn btn-primary" asp-action="AllRestaurants">Wróć</a>
             </div>
         </div>
     </div>

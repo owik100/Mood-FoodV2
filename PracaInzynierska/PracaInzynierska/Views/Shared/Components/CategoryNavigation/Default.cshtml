@@ -11,7 +11,8 @@
     @foreach (var item in Model)
     {
         <li class="nav-item">
-            <a class="btn btn-danger ml-2 mb-2 nav-link" asp-controller="Product" asp-action="Products" asp-route-category="@item.Name">@item.Name</a>
+            <a class="btn btn-danger ml-2 mb-2 nav-link" asp-controller="Product" 
+               asp-action="Products" asp-route-category="@item.Name">@item.Name</a>
         </li>
     }
 </ul>

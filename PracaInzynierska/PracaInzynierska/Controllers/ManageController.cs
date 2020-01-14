@@ -387,6 +387,11 @@ namespace PracaInzynierska.Controllers
             return RedirectToAction("AllProducts");
         }
 
+        public ActionResult OrdersQueeq()
+        {
+            return View();
+        }
+
     }
 }
 

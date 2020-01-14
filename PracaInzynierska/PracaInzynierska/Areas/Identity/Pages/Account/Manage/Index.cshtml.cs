@@ -46,7 +46,7 @@ namespace PracaInzynierska.Areas.Identity.Pages.Account.Manage
 
             [Phone]
             [Required(ErrorMessage = "Podaj numer telefonu")]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Numer telefonu")]
             public string PhoneNumber { get; set; }
 
             [Display(Name = "Imię")]

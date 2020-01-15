@@ -41,13 +41,14 @@ namespace PracaInzynierska.Controllers
         public IActionResult AllOrders()
         {
             var orders = _db.Orders
+                .Include(y => y.OrderItem)
                 .OrderBy(x => x.Status)
-                .ThenBy(y=>y.OrderDate)
+                .ThenByDescending(y => y.OrderDate)
                 .ToList();
 
-            return View (orders);
+            return View(orders);
         }
-        
+
 
         public IActionResult AllUsers()
         {
@@ -85,14 +86,15 @@ namespace PracaInzynierska.Controllers
             _db.SaveChanges();
 
             TempData["MessageUser"] = "Zamówienie zrealizowane!";
-            return RedirectToAction("AllUsers");
+            return RedirectToAction("OrdersQueue");
         }
 
         public IActionResult UserOrders(string Id)
         {
-         
+
             var orders = _db.Orders.
                 Where(x => x.UserID == Id)
+                .OrderByDescending(z => z.OrderDate)
                 .Include(y => y.OrderItem)
                 .ToList();
 
@@ -105,7 +107,7 @@ namespace PracaInzynierska.Controllers
 
             var orderDetails = _db.OrderItems
                 .Where(x => x.OrderId == id)
-                .Include(y=>y.Product)
+                .Include(y => y.Product)
                 .ToList();
 
             var order = _db.Orders.
@@ -165,7 +167,7 @@ namespace PracaInzynierska.Controllers
         [HttpGet]
         public ActionResult RestaurantCreateEdit(int? Id)
         {
-            if(Id!=null)
+            if (Id != null)
             {
                 var restaurant = _db.Restaurants.Find(Id);
                 ViewBag.Edit = true;
@@ -176,11 +178,11 @@ namespace PracaInzynierska.Controllers
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult RestaurantCreateEdit(Restaurant restaurant)
-        {  
-            if (restaurant.RestaurantId >0)
-                {
+        {
+            if (restaurant.RestaurantId > 0)
+            {
                 if (ModelState.IsValid)
-                        {
+                {
                     _db.Entry(restaurant).State = EntityState.Modified;
                     _db.SaveChanges();
                     TempData["Message"] = "Sukces! zmieniono restaurację";
@@ -192,14 +194,14 @@ namespace PracaInzynierska.Controllers
                 }
             }
             ModelState.Remove("RestaurantId");
-                 if (ModelState.IsValid)
-                {
-                    _db.Restaurants.Add(restaurant);
-                    _db.SaveChanges();
-                    TempData["Message"] = "Sukces! Dodano restaurację";
+            if (ModelState.IsValid)
+            {
+                _db.Restaurants.Add(restaurant);
+                _db.SaveChanges();
+                TempData["Message"] = "Sukces! Dodano restaurację";
                 return RedirectToAction("AllRestaurants");
             }
-            
+
             return View(restaurant);
         }
 
@@ -214,7 +216,7 @@ namespace PracaInzynierska.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RestaurantDelete(Restaurant restaurant)
         {
-           
+
             if (restaurant != null)
             {
                 _db.Restaurants.Remove(restaurant);
@@ -387,9 +389,15 @@ namespace PracaInzynierska.Controllers
             return RedirectToAction("AllProducts");
         }
 
-        public ActionResult OrdersQueeq()
+        public ActionResult OrdersQueue()
         {
-            return View();
+            var orders = _db.Orders
+                .Include(x => x.OrderItem)
+                .Where(y => y.Status == OrderStatus.New)
+                .OrderBy(z => z.OrderDate)
+                .ToList();
+
+            return View(orders);
         }
 
     }

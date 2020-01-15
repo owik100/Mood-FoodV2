@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace PracaInzynierska.Models.Entities
 {
+    [JsonObject(IsReference = true)]
     public class Order
     {
         [HiddenInput(DisplayValue = false)]

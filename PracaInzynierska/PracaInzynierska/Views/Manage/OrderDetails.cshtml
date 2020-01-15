@@ -102,10 +102,10 @@
         @foreach (var item in Model.OrderItems)
         {
             <tr>
-                <td >
+                <td>
                     <p>@item.Product.Name</p>
                 </td>
-                <td >
+                <td>
                     <img style="max-height:200px" src="@Url.ProductImagePath(item.Product.NameOfImage)" class="img-fluid border border-dark border-3 ">
                 </td>
                 <td>
@@ -117,3 +117,14 @@
             </tr>
         }
 </table>
+
+@{
+    if (Model.Order.Status == PracaInzynierska.Models.Entities.OrderStatus.New)
+    {
+        <a class="btn btn bg-success" asp-controller="Manage" asp-action="OrderComplete" asp-route-id="@Model.Order.OrderId">Zatwierdź</a>
+    }
+    else
+    {
+        @Html.DisplayFor(modelItem => Model.Order.Status)
+    }
+}

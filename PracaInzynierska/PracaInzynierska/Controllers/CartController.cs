@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using PracaInzynierska.Data;
+using PracaInzynierska.Hubs;
 using PracaInzynierska.Infrastructure;
 using PracaInzynierska.Models.Entities;
 using PracaInzynierska.ViewModels;
@@ -23,12 +25,14 @@ namespace PracaInzynierska.Controllers
         private ApplicationDbContext _db;
         private IServiceProvider _serviceProvider;
         private IMyEmailSender _emailSender;
+        private readonly IHubContext<QueuqHub> _hubContext;
 
-        public CartController(ApplicationDbContext applicationDbContext, IServiceProvider serviceProvider, IMyEmailSender emailSender)
+        public CartController(ApplicationDbContext applicationDbContext, IServiceProvider serviceProvider, IMyEmailSender emailSender, IHubContext<QueuqHub> hubContext)
         {
             _db = applicationDbContext;
             _serviceProvider = serviceProvider;
             _emailSender = emailSender;
+            _hubContext = hubContext; 
         }
 
         public IActionResult Index()
@@ -160,6 +164,22 @@ namespace PracaInzynierska.Controllers
                     //Zapisz w bazie
                     _db.Orders.Add(order);
                     _db.SaveChanges();
+
+                    var objectToQueqe = new
+                    {
+                        OrderId = order.OrderId,
+                        UserID = order.UserID,
+                        OrderDate = order.OrderDate.ToString(),
+                        OrderValue = order.OrderValue,
+                        OptionalDescription = order.OptionalDescription,
+                        OrderItemCount = order.OrderItem.Count
+                    };
+
+                    string output = JsonConvert.SerializeObject(objectToQueqe);
+
+                   
+
+                    await this._hubContext.Clients.All.SendAsync("ReceiveOrder", output);
 
                     //Wyślij potwierdzenie emailem
                     StringBuilder products = new StringBuilder();

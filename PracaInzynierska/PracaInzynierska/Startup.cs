@@ -17,6 +17,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using PracaInzynierska.Models.Entities;
 using PracaInzynierska.Infrastructure;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using PracaInzynierska.Hubs;
+
 
 namespace PracaInzynierska
 {
@@ -48,12 +50,14 @@ namespace PracaInzynierska
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDistributedMemoryCache();
             services.AddSession();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IMyEmailSender, MailManager>();
+
+            services.AddSignalR();
         }
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
@@ -118,6 +122,11 @@ namespace PracaInzynierska
             app.UseAuthentication();
 
             app.UseSession();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<QueuqHub>("/queqHub");
+            });
 
             app.UseMvc(routes =>
             {

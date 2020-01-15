@@ -125,7 +125,7 @@ namespace PracaInzynierska
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<QueuqHub>("/queqHub");
+                routes.MapHub<QueueHub>("/QueueHub");
             });
 
             app.UseMvc(routes =>

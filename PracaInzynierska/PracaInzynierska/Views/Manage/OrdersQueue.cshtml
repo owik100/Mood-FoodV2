@@ -5,58 +5,31 @@
 
 <h1 class="text-center display-4">Oczekujące zamówienia</h1>
 
-
-<div class="container">
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-6">&nbsp;</div>
-        <div class="col-6">
-            User..........<input type="text" id="userInput" />
-            <br />
-            Message...<input type="text" id="messageInput" />
-            <input type="button" id="sendButton" value="Send Message" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <hr />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">&nbsp;</div>
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
-</div>
-<script src="~/lib/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/queqe.js"></script>
-
-    <table class="table" id="tableQ">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].OrderDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].OrderValue)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].OptionalDescription)
-                </th>
-                <th>
-                    @Html.DisplayName("Ilość zamówionych produktów")
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].Status)
-                </th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-@foreach (var item in Model)
-{
+<table class="table" id="tableQ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].OrderValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].OptionalDescription)
+            </th>
+            <th>
+                @Html.DisplayName("Ilość zamówionych produktów")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Status)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
 
             <tr>
                 <td>
@@ -87,7 +60,7 @@
                 <td>
                     <a class="btn btn bg-primary" asp-controller="Manage" asp-action="OrderDetails" asp-route-id="@item.OrderId">Szczegóły</a>
                 </td>
-                <td style="width:10%">
+                <td >
                     @{
                         if (item.UserID != null)
                         {
@@ -100,6 +73,8 @@
                     }
                 </td>
             </tr>
-                        }
-    </table>
-                        
+        }
+</table>
+
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/queqe.js"></script>

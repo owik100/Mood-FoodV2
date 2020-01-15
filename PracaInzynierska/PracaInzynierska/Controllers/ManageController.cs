@@ -58,14 +58,6 @@ namespace PracaInzynierska.Controllers
             return View(users);
         }
 
-        public IActionResult AllRestaurants()
-        {
-            var restaurants = _db.Restaurants
-                .ToList();
-
-            return View(restaurants);
-        }
-
         public IActionResult OrderComplete(int id)
         {
             var order = _db.Orders.
@@ -163,68 +155,6 @@ namespace PracaInzynierska.Controllers
             TempData["MessageUser"] = "Sukces! Zmieniono uprawnienia";
             return RedirectToAction("AllUsers");
         }
-
-        [HttpGet]
-        public ActionResult RestaurantCreateEdit(int? Id)
-        {
-            if (Id != null)
-            {
-                var restaurant = _db.Restaurants.Find(Id);
-                ViewBag.Edit = true;
-                return View(restaurant);
-            }
-            return View();
-        }
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public ActionResult RestaurantCreateEdit(Restaurant restaurant)
-        {
-            if (restaurant.RestaurantId > 0)
-            {
-                if (ModelState.IsValid)
-                {
-                    _db.Entry(restaurant).State = EntityState.Modified;
-                    _db.SaveChanges();
-                    TempData["Message"] = "Sukces! zmieniono restaurację";
-                    return RedirectToAction("AllRestaurants");
-                }
-                else
-                {
-                    return View(restaurant);
-                }
-            }
-            ModelState.Remove("RestaurantId");
-            if (ModelState.IsValid)
-            {
-                _db.Restaurants.Add(restaurant);
-                _db.SaveChanges();
-                TempData["Message"] = "Sukces! Dodano restaurację";
-                return RedirectToAction("AllRestaurants");
-            }
-
-            return View(restaurant);
-        }
-
-        [HttpGet]
-        public ActionResult RestaurantDelete(int id)
-        {
-            var restaurant = _db.Restaurants.Find(id);
-            return View(restaurant);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult RestaurantDelete(Restaurant restaurant)
-        {
-
-            if (restaurant != null)
-            {
-                _db.Restaurants.Remove(restaurant);
-                _db.SaveChanges();
-            }
-            return RedirectToAction("AllRestaurants");
-        }
-
 
         public ActionResult AllProducts()
         {

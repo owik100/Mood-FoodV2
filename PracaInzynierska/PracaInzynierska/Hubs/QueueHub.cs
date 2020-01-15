@@ -7,13 +7,8 @@ using PracaInzynierska.Models.Entities;
 
 namespace PracaInzynierska.Hubs
 {
-    public class QueuqHub : Hub
+    public class QueueHub : Hub
     {
-        public async Task SendMessage(string user, string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
-        }
-
         public async Task SendNewOrder(Order order)
         {
             await Clients.All.SendAsync("ReceiveOrder", order);

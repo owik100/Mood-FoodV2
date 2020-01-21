@@ -25,12 +25,14 @@ namespace PracaInzynierska.Controllers
         private ApplicationDbContext _db;
         private IHostingEnvironment _environment;
         private IServiceProvider _serviceProvider;
+        private UserManager<ApplicationUser> _userManager;
 
-        public ManageController(ApplicationDbContext applicationDbContext, IHostingEnvironment environment, IServiceProvider serviceProvider)
+        public ManageController(ApplicationDbContext applicationDbContext, IHostingEnvironment environment, IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager)
         {
             _db = applicationDbContext;
             _environment = environment;
             _serviceProvider = serviceProvider;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -129,29 +131,27 @@ namespace PracaInzynierska.Controllers
         [HttpPost]
         public async Task<IActionResult> UserAdmin(ApplicationUser user)
         {
-            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var IsAdmin = await userManager.IsInRoleAsync(user, "Admin");
+            var IsAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
             //Czy zalogowany admin nie próbuje odebrać sobie praw?
-            var currentUserId = userManager.GetUserId(HttpContext.User);
+            var currentUserId = _userManager.GetUserId(HttpContext.User);
             if (currentUserId == user.Id)
             {
                 TempData["MessageUser"] = "Błąd! Nie można zmienić uprawnień samemu sobie!";
                 return RedirectToAction("AllUsers");
             }
 
-            var userEdit = await userManager.FindByIdAsync(user.Id);
+            var userEdit = await _userManager.FindByIdAsync(user.Id);
             //Jeżeli user był adminem, usuń, inaczej ustaw rolę
             if (IsAdmin)
             {
 
-                await userManager.RemoveFromRoleAsync(userEdit, "Admin");
+                await _userManager.RemoveFromRoleAsync(userEdit, "Admin");
             }
             else
             {
-                await userManager.AddToRoleAsync(userEdit, "Admin");
+                await _userManager.AddToRoleAsync(userEdit, "Admin");
             }
-            //await userManager.UpdateAsync(user);
             TempData["MessageUser"] = "Sukces! Zmieniono uprawnienia";
             return RedirectToAction("AllUsers");
         }

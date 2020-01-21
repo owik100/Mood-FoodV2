@@ -28,4 +28,6 @@ connection.on("ReceiveOrder", function (output) {
     if (obj.UserID != null) {
         cell7.innerHTML = '<a class="btn btn bg-danger" href="/Manage/UserOrders/' + obj.UserID + ' ">Użytkownik</a>'
     }
+
 });
+

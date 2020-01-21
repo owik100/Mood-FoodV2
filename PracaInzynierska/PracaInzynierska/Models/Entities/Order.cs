@@ -44,7 +44,7 @@ namespace PracaInzynierska.Models.Entities
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "Podaj adres email")]
         [EmailAddress(ErrorMessage = "Błędny format adresu email.")]
-        public string Emial { get; set; }
+        public string Email { get; set; }
         [Display(Name = "Dodatkowe informacje")]
         public string OptionalDescription { get; set; }
         [Display(Name = "Data zamówienia")]

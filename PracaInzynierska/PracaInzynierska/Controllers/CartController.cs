@@ -26,13 +26,15 @@ namespace PracaInzynierska.Controllers
         private IServiceProvider _serviceProvider;
         private IMyEmailSender _emailSender;
         private readonly IHubContext<QueueHub> _hubContext;
+        private UserManager<ApplicationUser> _userManager;
 
-        public CartController(ApplicationDbContext applicationDbContext, IServiceProvider serviceProvider, IMyEmailSender emailSender, IHubContext<QueueHub> hubContext)
+        public CartController(ApplicationDbContext applicationDbContext, IServiceProvider serviceProvider, IMyEmailSender emailSender, IHubContext<QueueHub> hubContext, UserManager<ApplicationUser> userManager)
         {
             _db = applicationDbContext;
             _serviceProvider = serviceProvider;
             _emailSender = emailSender;
-            _hubContext = hubContext; 
+            _hubContext = hubContext;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -107,10 +109,10 @@ namespace PracaInzynierska.Controllers
                     LastName = applicationUser.LastName,
                     City = applicationUser.City,
                     Street = applicationUser.Street,
-                    Emial = applicationUser.Email,
+                    Email = applicationUser.Email,
                     HouseNumber = applicationUser.HouseNumber,
                     PhoneNumber = applicationUser.PhoneNumber,
-                    ZIPCode = applicationUser.ZIPCode,                 
+                    ZIPCode = applicationUser.ZIPCode,
 
                 };
 
@@ -128,7 +130,6 @@ namespace PracaInzynierska.Controllers
             if (ModelState.IsValid)
             {
                 List<CartProductViewModel> shoppingCart = GetShoppingCart();
-
                 List<OrderItem> orderItems = new List<OrderItem>();
 
                 foreach (var item in shoppingCart)
@@ -144,63 +145,34 @@ namespace PracaInzynierska.Controllers
                     orderItems.Add(orderItem);
                 }
 
-                
-                    order.OrderDate = DateTime.Now;
-                    order.OrderItem = orderItems;
-                    order.OrderValue = CartTotalValue(shoppingCart);
+                order.OrderDate = DateTime.Now;
+                order.OrderItem = orderItems;
+                order.OrderValue = CartTotalValue(shoppingCart);
 
-                    //Dodaj zamówienie do zalogowanego użytkownika, jeżeli jest zalogowany
-                    var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                    var userId = userManager.GetUserId(HttpContext.User);
+                //Dodaj zamówienie do zalogowanego użytkownika, jeżeli jest zalogowany
+                var userId = _userManager.GetUserId(HttpContext.User);
 
-                    if (userId != null)
-                    {
-                        order.UserID = userId;
-                    }
+                if (userId != null)
+                {
+                    order.UserID = userId;
+                }
 
-                    //Zapisz w bazie
-                    _db.Orders.Add(order);
-                    _db.SaveChanges();
+                //Zapisz w bazie
+                _db.Orders.Add(order);
+                _db.SaveChanges();
 
-                    var objectToQueqe = new
-                    {
-                        OrderId = order.OrderId,
-                        UserID = order.UserID,
-                        OrderDate = order.OrderDate.ToString(),
-                        OrderValue = order.OrderValue,
-                        OptionalDescription = order.OptionalDescription,
-                        OrderItemCount = order.OrderItem.Count
-                    };
+                //Powiadom administartora o nowym zamówieniu
+                await SendAnnouncementNewOrder(order);
 
-                    string output = JsonConvert.SerializeObject(objectToQueqe);
+                //Wyślij potwierdzenie emailem
+                await SendEmail(order);
 
-                   
+                //Usuń koszyk
+                EmptyCart();
 
-                    await this._hubContext.Clients.All.SendAsync("ReceiveOrder", output);
-
-                    //Wyślij potwierdzenie emailem
-                    StringBuilder products = new StringBuilder();
-
-                    foreach (var item in order.OrderItem)
-                    {
-                        products.Append(item.Product.Name + " - " + item.Quantity + "szt.\n");
-                    }
-
-                    StringBuilder message = new StringBuilder();
-                    message.Append("Dziękujemy za złożene zamówienia!\n\n");
-                    message.Append(products);
-                    message.Append("Całkowita wartość zamówienia: " + order.OrderValue.ToString("C"));
-
-                    await _emailSender.SendEmailAsync(order.Emial, "Złożono zamówienie", message.ToString());
-
-
-                    //Usuń koszyk
-                    EmptyCart();
-
-                    //Pokaż potwierdzenie
-                    TempData["OrderComplete"] = "Zamówienie złożone!";
-                    return RedirectToAction("Index");
-              
+                //Pokaż potwierdzenie
+                TempData["OrderComplete"] = "Zamówienie złożone!";
+                return RedirectToAction("Index");
             }
             else
                 return View(order);
@@ -239,6 +211,40 @@ namespace PracaInzynierska.Controllers
             }
 
             return totalValue;
+        }
+
+        private async Task SendEmail(Order order)
+        {
+            StringBuilder products = new StringBuilder();
+
+            foreach (var item in order.OrderItem)
+            {
+                products.Append(item.Product.Name + " - " + item.Quantity + "szt.\n");
+            }
+
+            StringBuilder message = new StringBuilder();
+            message.Append("Dziękujemy za złożene zamówienia!\n\n");
+            message.Append(products);
+            message.Append("Całkowita wartość zamówienia: " + order.OrderValue.ToString("C"));
+
+            await _emailSender.SendEmailAsync(order.Email, "Złożono zamówienie", message.ToString());
+        }
+
+        private async Task SendAnnouncementNewOrder(Order order)
+        {
+            var QueueInfo = new
+            {
+                OrderId = order.OrderId,
+                UserID = order.UserID,
+                OrderDate = order.OrderDate.ToString(),
+                OrderValue = order.OrderValue,
+                OptionalDescription = order.OptionalDescription,
+                OrderItemCount = order.OrderItem.Count
+            };
+
+            string JsonQueue = JsonConvert.SerializeObject(QueueInfo);
+
+            await _hubContext.Clients.All.SendAsync("ReceiveOrder", JsonQueue);
         }
 
     }
